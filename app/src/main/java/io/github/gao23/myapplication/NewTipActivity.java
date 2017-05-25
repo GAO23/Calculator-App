@@ -1,23 +1,25 @@
 package io.github.gao23.myapplication;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
-import java.util.concurrent.locks.ReadWriteLock;
 
 public class NewTipActivity extends AppCompatActivity {
     private Button saveButton;
     private EditText entry;
+    private EditText subEntry;
+    private double customerPaynment = 0.00;
+    private CheckBox cashTip;
     private RelativeLayout view;
+    private LayoutParams lp1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,28 +32,47 @@ public class NewTipActivity extends AppCompatActivity {
     public void newUnpaidOrderClicked(View v){
         if(entry==null) {
             entry = new EditText(this);
+            entry.setId(1);
             entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-            entry.setHint("Enter a new unpaid order amount");
+            entry.setHint("Enter amount charged to customer");
+            subEntry = new EditText(this);
+            subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+            subEntry.setHint("Enter your order number");
             view.addView(entry);
-            entry.addTextChangedListener(new TextChangeListener(this));
+            this.setPara();
+            view.addView(subEntry, lp1);
+            entry.addTextChangedListener(new TextChangeListener(saveButton));
+            subEntry.addTextChangedListener(new TextChangeListener(this.saveButton));
         }
         else{
             entry.setText("");
-            entry.setHint("Enter a new unpaid order amount");
+            subEntry.setText("");
+            entry.setHint("Enter the amount charged to customer");
+            subEntry.setHint("Enter your order number");
         }
+
     }
 
     public void newPaidOrderClicked(View v){
          if(entry== null) {
              entry = new EditText(this);
+             entry.setId(1);
              entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-             entry.setHint("Enter a new paid order amount");
+             entry.setHint("Enter your tip");
+             subEntry = new EditText(this);
+             subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+             subEntry.setHint("Enter your order address");
              view.addView(entry);
-             entry.addTextChangedListener(new TextChangeListener(this));
+             this.setPara();
+             view.addView(subEntry,lp1);
+             entry.addTextChangedListener(new TextChangeListener(this.saveButton));
+             subEntry.addTextChangedListener(new TextChangeListener(this.saveButton));
          }
          else{
              entry.setText("");
-             entry.setHint("Enter a new paid order amount");
+             subEntry.setText("");
+             entry.setHint("Enter your tip");
+             subEntry.setHint("Enter your order address");
          }
     }
 
@@ -59,12 +80,11 @@ public class NewTipActivity extends AppCompatActivity {
         entry.setText("Not supported yet but working on it");
     }
 
-    public void setEnable(){
-        saveButton.setEnabled(true);
+    public void setPara(){
+        lp1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lp1.addRule(RelativeLayout.BELOW, entry.getId());
     }
-    public void setDisable(){
-        saveButton.setEnabled(false);
-    }
+
 
 
 }
