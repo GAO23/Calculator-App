@@ -8,7 +8,8 @@
         android:id="@+id/listView"
         android:layout_width="368dp"
         android:layout_height="495dp"
-        ></ListView>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"></ListView>
 
 
     <android.support.design.widget.FloatingActionButton

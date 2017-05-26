@@ -16,10 +16,13 @@ public class NewTipActivity extends AppCompatActivity {
     private Button saveButton;
     private EditText entry;
     private EditText subEntry;
-    private double customerPaynment = 0.00;
+    private EditText customerPaynment;
     private CheckBox cashTip;
     private RelativeLayout view;
     private LayoutParams lp1;
+    private LayoutParams lp2;
+    private boolean viewAddedFlag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,63 +30,73 @@ public class NewTipActivity extends AppCompatActivity {
         saveButton = (Button) findViewById(R.id.Save);
         this.saveButton.setEnabled(false);
         view = (RelativeLayout) findViewById(R.id.RelativeLayout01);
+        entry = new EditText(this);
+        entry.setId(1);
+        entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+        subEntry = new EditText(this);
+        subEntry.setId(2);
+        subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+        entry.addTextChangedListener(new TextChangeListener(saveButton, entry, subEntry, customerPaynment, this));
+        subEntry.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
+        lp1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lp1.addRule(RelativeLayout.BELOW, entry.getId());
+        lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lp2.addRule(RelativeLayout.BELOW, subEntry.getId());
      }
 
     public void newUnpaidOrderClicked(View v){
-        if(entry==null) {
-            entry = new EditText(this);
-            entry.setId(1);
-            entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-            entry.setHint("Enter amount charged to customer");
-            subEntry = new EditText(this);
-            subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-            subEntry.setHint("Enter your order number");
+        entry.setText("");
+        subEntry.setText("");
+        entry.setHint("Enter amount charged to customer");
+        subEntry.setHint("Enter your order number");
+        if(!viewAddedFlag){
             view.addView(entry);
-            this.setPara();
             view.addView(subEntry, lp1);
-            entry.addTextChangedListener(new TextChangeListener(saveButton));
-            subEntry.addTextChangedListener(new TextChangeListener(this.saveButton));
+            this.viewAddedFlag = true;
         }
-        else{
-            entry.setText("");
-            subEntry.setText("");
-            entry.setHint("Enter the amount charged to customer");
-            subEntry.setHint("Enter your order number");
+        if(cashTip!= null){
+            view.removeView(cashTip);
+            cashTip=null;
         }
-
+        if(customerPaynment==null) {
+            customerPaynment = new EditText(this);
+            customerPaynment.setHint("Enter customer payment amount");
+            customerPaynment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
+            view.addView(customerPaynment, lp2);
+        }
     }
 
     public void newPaidOrderClicked(View v){
-         if(entry== null) {
-             entry = new EditText(this);
-             entry.setId(1);
-             entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-             entry.setHint("Enter your tip");
-             subEntry = new EditText(this);
-             subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-             subEntry.setHint("Enter your order address");
-             view.addView(entry);
-             this.setPara();
-             view.addView(subEntry,lp1);
-             entry.addTextChangedListener(new TextChangeListener(this.saveButton));
-             subEntry.addTextChangedListener(new TextChangeListener(this.saveButton));
-         }
-         else{
-             entry.setText("");
-             subEntry.setText("");
-             entry.setHint("Enter your tip");
-             subEntry.setHint("Enter your order address");
-         }
+        entry.setText("");
+        subEntry.setText("");
+        entry.setHint("Enter your tip amount");
+        subEntry.setHint("Enter your order address");
+
+        if(!viewAddedFlag){
+            view.addView(entry);
+            view.addView(subEntry, lp1);
+            this.viewAddedFlag = true;
+        }
+        if(customerPaynment!=null){
+            view.removeView(customerPaynment);
+            customerPaynment = null;
+        }
+        if(cashTip== null) {
+            cashTip = new CheckBox(this);
+            cashTip.setText("Check the box if this is cash tip");
+            view.addView(cashTip, lp2);
+        }
+    }
+
+    public boolean isCashTipull(){
+        return cashTip == null;
     }
 
     public void SaveClicked(View v) {
         entry.setText("Not supported yet but working on it");
     }
 
-    public void setPara(){
-        lp1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-        lp1.addRule(RelativeLayout.BELOW, entry.getId());
-    }
+
 
 
 
