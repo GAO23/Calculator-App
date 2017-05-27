@@ -64,6 +64,10 @@ public class NewTipActivity extends AppCompatActivity {
             customerPaynment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
             view.addView(customerPaynment, lp2);
         }
+        if(customerPaynment!=null){
+            customerPaynment.setText("");
+            customerPaynment.setHint("Enter customer payment amount");
+        }
     }
 
     public void newPaidOrderClicked(View v){
@@ -85,6 +89,9 @@ public class NewTipActivity extends AppCompatActivity {
             cashTip = new CheckBox(this);
             cashTip.setText("Check the box if this is cash tip");
             view.addView(cashTip, lp2);
+        }
+        if(cashTip!=null){
+            cashTip.setChecked(false);
         }
     }
 

@@ -17,10 +17,10 @@ public class TextChangeListener implements TextWatcher{
         private EditText customerPayment;
         private NewTipActivity act;
 
-    public TextChangeListener(Button button, EditText entry, EditText subentery, EditText customerPayment, NewTipActivity act){
+    public TextChangeListener(Button button, EditText entry, EditText subentry, EditText customerPayment, NewTipActivity act){
         this.button = button;
         this.entry = entry;
-        this.subentry = subentery;
+        this.subentry = subentry;
         this.customerPayment = customerPayment;
         this.act = act;
     }
