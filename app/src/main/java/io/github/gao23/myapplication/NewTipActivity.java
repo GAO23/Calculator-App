@@ -1,5 +1,6 @@
 package io.github.gao23.myapplication;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Toast;
 
 
 public class NewTipActivity extends AppCompatActivity {
@@ -95,12 +97,38 @@ public class NewTipActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isCashTipull(){
+    public boolean isCashTipNull(){
         return cashTip == null;
     }
 
     public void SaveClicked(View v) {
-        entry.setText("Not supported yet but working on it");
+       if(isCashTipNull()){
+           double chargedAmount;
+           int orderNum;
+           double payment;
+           try {
+               chargedAmount = Double.parseDouble(entry.getText().toString());
+           }
+           catch (NumberFormatException e){
+               Toast.makeText(this.getApplicationContext(), "Invalid charged amount", Toast.LENGTH_LONG).show();
+           }
+           try {
+               orderNum = Integer.parseInt(subEntry.getText().toString());
+           }
+           catch (NumberFormatException e){
+               Toast.makeText(this.getApplicationContext(), "Invalid order number", Toast.LENGTH_LONG).show();
+           }
+           try {
+               payment = Double.parseDouble(customerPaynment.getText().toString());
+           }
+           catch (NumberFormatException e){
+               Toast.makeText(this.getApplicationContext(), "Invalid customer payment", Toast.LENGTH_LONG).show();
+           }
+       }
+
+       else{
+
+       }
     }
 
 

@@ -27,6 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v){
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, NewTipActivity.class);
-        startActivityForResult(intent, Indent_passCode.WHATEVER);
+        startActivityForResult(intent, intentCode.PASS);
     }
 }

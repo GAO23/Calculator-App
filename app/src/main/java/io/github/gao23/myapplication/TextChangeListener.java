@@ -34,7 +34,7 @@ public class TextChangeListener implements TextWatcher{
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (!act.isCashTipull()) {
+        if (!act.isCashTipNull()) {
             if (entry.getText().length() == 0 || subentry.getText().length() == 0) {
                 button.setEnabled(false);
             } else {
