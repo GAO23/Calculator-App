@@ -102,36 +102,82 @@ public class NewTipActivity extends AppCompatActivity {
     }
 
     public void SaveClicked(View v) {
-       if(isCashTipNull()){
-           double chargedAmount;
-           int orderNum;
-           double payment;
-           try {
-               chargedAmount = Double.parseDouble(entry.getText().toString());
-           }
-           catch (NumberFormatException e){
-               Toast.makeText(this.getApplicationContext(), "Invalid charged amount", Toast.LENGTH_LONG).show();
-           }
-           try {
-               orderNum = Integer.parseInt(subEntry.getText().toString());
-           }
-           catch (NumberFormatException e){
-               Toast.makeText(this.getApplicationContext(), "Invalid order number", Toast.LENGTH_LONG).show();
-           }
-           try {
-               payment = Double.parseDouble(customerPaynment.getText().toString());
-           }
-           catch (NumberFormatException e){
-               Toast.makeText(this.getApplicationContext(), "Invalid customer payment", Toast.LENGTH_LONG).show();
-           }
-       }
-
-       else{
-
-       }
+        Entry result;
+        try {
+            if(isCashTipNull()) {
+                double chargedAmount;
+                int orderNum;
+                double payment;
+                try {
+                    chargedAmount = Double.parseDouble(entry.getText().toString());
+                    if(!decimalCheck(chargedAmount)){
+                        throw new InvalidInputException(5);
+                    }
+                } catch (NumberFormatException e) {
+                   throw new InvalidInputException(1);
+                }
+                try {
+                    orderNum = Integer.parseInt(subEntry.getText().toString());
+                } catch (NumberFormatException e) {
+                    throw new InvalidInputException(2);
+                }
+                try {
+                    payment = Double.parseDouble(customerPaynment.getText().toString());
+                    if(!decimalCheck(payment)){
+                        throw new InvalidInputException(6);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new InvalidInputException(3);
+                }
+                result = new Entry(chargedAmount,orderNum,payment);
+                Toast.makeText(this.getApplicationContext(),  Double.toString(result.getEntry()), Toast.LENGTH_LONG).show();
+            }
+            else{
+                double tipAmount;
+                String orderAddress = subEntry.getText().toString();
+                boolean isCashTip = cashTip.isChecked();
+                try {
+                    tipAmount = Double.parseDouble(entry.getText().toString());
+                    if(!decimalCheck(tipAmount)){
+                        throw new InvalidInputException(7);
+                    }
+                }catch (NumberFormatException e){
+                    throw new InvalidInputException(4);
+                }
+                result = new Entry(tipAmount,orderAddress,isCashTip);
+                Toast.makeText(this.getApplicationContext(),  Double.toString(result.getEntry()), Toast.LENGTH_LONG).show();
+            }
+        }
+        catch (InvalidInputException e){
+            int errorCode = e.getErrorCode();
+            switch(errorCode) {
+                case 1: Toast.makeText(this.getApplicationContext(), "Invalid charged amount", Toast.LENGTH_LONG).show();
+                    break;
+                case 2: Toast.makeText(this.getApplicationContext(), "Order number needs to be a whole number", Toast.LENGTH_LONG).show();
+                    break;
+                case 3: Toast.makeText(this.getApplicationContext(), "Invalid payment amount", Toast.LENGTH_LONG).show();
+                    break;
+                case 4: Toast.makeText(this.getApplicationContext(), "Invalid tip amount", Toast.LENGTH_LONG).show();
+                    break;
+                case 5 : Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
+                    break;
+                case 6 : Toast.makeText(this.getApplicationContext(), "Make sure payment amount has two decimals only for cents", Toast.LENGTH_LONG).show();
+                    break;
+                case 7 : Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals for only cents", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
-
+    private boolean decimalCheck(double test) {
+       String num = Double.toString(test);
+        int i = num.lastIndexOf('.');
+        if(i != -1 && num.substring(i + 1).length() == 2) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 
 
