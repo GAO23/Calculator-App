@@ -10,8 +10,8 @@ public class Entry {
     private double customerPayment;
     private double paidEntry;
     private String paidSubEntry;
-    boolean cashiTip = false;
-    boolean paidFlag = false;
+    private boolean cashTip = false;
+    private boolean paidFlag = false;
 
     public Entry (double unpaidEntry, int unpaidSubEntry, double customerPayment){
          this.unpaidEntry = unpaidEntry;
@@ -19,10 +19,10 @@ public class Entry {
          this.customerPayment = customerPayment;
     }
 
-    public Entry(double paidEntry, String paiSubEntry, boolean cashiTip){
+    public Entry(double paidEntry, String paiSubEntry, boolean cashTip){
         this.paidEntry = paidEntry;
         this.paidSubEntry = paiSubEntry;
-        this.cashiTip = cashiTip;
+        this.cashTip = cashTip;
         paidFlag = true;
     }
 
@@ -35,31 +35,31 @@ public class Entry {
         }
     }
 
-    public int getUnpaidSubEntry() throws PaidUnpaidException{
+    public int getUnpaidSubEntry() {
        if(paidFlag){
            throw new PaidUnpaidException();
        }
        return unpaidSubEntry;
     }
 
-    public String getPaidSubEntry() throws PaidUnpaidException{
+    public String getPaidSubEntry(){
         if(!paidFlag){
             throw new PaidUnpaidException();
         }
         return paidSubEntry;
     }
 
-    public double getCustomerPayment() throws  PaidUnpaidException{
+    public double getCustomerPayment() {
         if(paidFlag){
             throw new PaidUnpaidException();
         }
         return customerPayment;
     }
 
-    public boolean isCashiTip() throws PaidUnpaidException{
+    public boolean isCashiTip(){
         if(!paidFlag){
             throw new PaidUnpaidException();
         }
-        return cashiTip;
+        return cashTip;
     }
 }

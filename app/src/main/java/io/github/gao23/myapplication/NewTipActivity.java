@@ -1,6 +1,7 @@
 package io.github.gao23.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ public class NewTipActivity extends AppCompatActivity {
     private Button saveButton;
     private EditText entry;
     private EditText subEntry;
-    private EditText customerPaynment;
+    private EditText customerPayment;
     private CheckBox cashTip;
     private RelativeLayout view;
     private LayoutParams lp1;
@@ -38,8 +39,8 @@ public class NewTipActivity extends AppCompatActivity {
         subEntry = new EditText(this);
         subEntry.setId(2);
         subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-        entry.addTextChangedListener(new TextChangeListener(saveButton, entry, subEntry, customerPaynment, this));
-        subEntry.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
+        entry.addTextChangedListener(new TextChangeListener(saveButton, entry, subEntry, customerPayment, this));
+        subEntry.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
         lp1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
         lp1.addRule(RelativeLayout.BELOW, entry.getId());
         lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
@@ -60,15 +61,15 @@ public class NewTipActivity extends AppCompatActivity {
             view.removeView(cashTip);
             cashTip=null;
         }
-        if(customerPaynment==null) {
-            customerPaynment = new EditText(this);
-            customerPaynment.setHint("Enter customer payment amount");
-            customerPaynment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
-            view.addView(customerPaynment, lp2);
+        if(customerPayment==null) {
+            customerPayment = new EditText(this);
+            customerPayment.setHint("Enter customer payment amount");
+            customerPayment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
+            view.addView(customerPayment, lp2);
         }
-        if(customerPaynment!=null){
-            customerPaynment.setText("");
-            customerPaynment.setHint("Enter customer payment amount");
+        if(customerPayment!=null){
+            customerPayment.setText("");
+            customerPayment.setHint("Enter customer payment amount");
         }
     }
 
@@ -83,9 +84,9 @@ public class NewTipActivity extends AppCompatActivity {
             view.addView(subEntry, lp1);
             this.viewAddedFlag = true;
         }
-        if(customerPaynment!=null){
-            view.removeView(customerPaynment);
-            customerPaynment = null;
+        if(customerPayment!=null){
+            view.removeView(customerPayment);
+            customerPayment = null;
         }
         if(cashTip== null) {
             cashTip = new CheckBox(this);
@@ -122,7 +123,7 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(2);
                 }
                 try {
-                    payment = Double.parseDouble(customerPaynment.getText().toString());
+                    payment = Double.parseDouble(customerPayment.getText().toString());
                     if(!decimalCheck(payment)){
                         throw new InvalidInputException(6);
                     }
@@ -177,6 +178,10 @@ public class NewTipActivity extends AppCompatActivity {
         else{
             return false;
         }
+    }
+
+    private void terminateActivity(){
+        Intent intent = new Intent();
     }
 
 
