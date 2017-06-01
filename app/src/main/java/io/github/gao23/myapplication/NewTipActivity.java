@@ -64,7 +64,7 @@ public class NewTipActivity extends AppCompatActivity {
         if(customerPayment==null) {
             customerPayment = new EditText(this);
             customerPayment.setHint("Enter customer payment amount");
-            customerPayment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPaynment, this));
+            customerPayment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
             view.addView(customerPayment, lp2);
         }
         if(customerPayment!=null){
@@ -131,7 +131,6 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(3);
                 }
                 result = new Entry(chargedAmount,orderNum,payment);
-                Toast.makeText(this.getApplicationContext(),  Double.toString(result.getEntry()), Toast.LENGTH_LONG).show();
             }
             else{
                 double tipAmount;
@@ -146,7 +145,6 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(4);
                 }
                 result = new Entry(tipAmount,orderAddress,isCashTip);
-                Toast.makeText(this.getApplicationContext(),  Double.toString(result.getEntry()), Toast.LENGTH_LONG).show();
             }
         }
         catch (InvalidInputException e){
