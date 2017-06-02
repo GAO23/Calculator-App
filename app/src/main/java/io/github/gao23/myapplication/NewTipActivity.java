@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -133,12 +134,7 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(3);
                 }
                 result = new Entry(chargedAmount,orderNum,payment);
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(intentCode.parb, result);
-                intent.putExtras(bundle);
-                this.setResult(intentCode.CHECK);
-                this.finish();
+               this.terminate(result);
             }
             else{
                 double tipAmount;
@@ -153,12 +149,7 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(4);
                 }
                 result = new Entry(tipAmount,orderAddress,isCashTip);
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(intentCode.parb, result);
-                intent.putExtras(bundle);
-                this.setResult(intentCode.CHECK);
-                this.finish();
+                this.terminate(result);
             }
         }
         catch (InvalidInputException e){
@@ -189,7 +180,12 @@ public class NewTipActivity extends AppCompatActivity {
     }
 
 
-
+      private void terminate(Entry result){
+          Intent intent = new Intent();
+          intent.putExtra(intentCode.parb, result);
+          this.setResult(intentCode.CHECK, intent);
+          this.finish();
+      }
 
 
 }

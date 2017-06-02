@@ -3,8 +3,10 @@ package io.github.gao23.myapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,18 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == intentCode.CHECK) {
-            Entry entry = data.getExtras().getParcelable(intentCode.parb);
-            String test = "";
-           if (entry.isPaid()) {
-                test = entry.getEntry() + "" + entry.getPaidSubEntry() + "" + entry.isCashiTip();
-            } else {
-                test = entry.getEntry() + "" + entry.getUnpaidSubEntry() + "" + entry.getCustomerPayment();
-            }
-            Toast.makeText(this.getApplicationContext(), test, Toast.LENGTH_LONG).show();
+            Entry entry = data.getParcelableExtra(intentCode.parb);
+            String test = Double.toString(entry.getEntry());
+            Log.d("test342", test);
         }
-        else{
-            return;
-        }
-    }
+
+
 }
