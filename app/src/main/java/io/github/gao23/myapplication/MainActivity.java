@@ -6,27 +6,45 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static double totalEarnings = 0.00;
     private  ListView list;
-    private ArrayList<String> tips;
-    private ArrayAdapter<String> tipsAdapter;
+    private ArrayList<Entry> todayEntry;
+    private ArrayAdapter<Entry> entryArrayAdapterr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = (ListView) findViewById(R.id.listView);
-        tips = new ArrayList<String>();
-        tipsAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,tips);
+        todayEntry = new ArrayList<Entry>();
+        entryArrayAdapterr = new ArrayAdapter<Entry>(this,android.R.layout.simple_list_item_1,todayEntry);
     }
 
     public void onClick(View v){
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, NewTipActivity.class);
         startActivityForResult(intent, intentCode.PASS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == intentCode.CHECK) {
+            Entry entry = data.getExtras().getParcelable(intentCode.parb);
+            String test = "";
+           if (entry.isPaid()) {
+                test = entry.getEntry() + "" + entry.getPaidSubEntry() + "" + entry.isCashiTip();
+            } else {
+                test = entry.getEntry() + "" + entry.getUnpaidSubEntry() + "" + entry.getCustomerPayment();
+            }
+            Toast.makeText(this.getApplicationContext(), test, Toast.LENGTH_LONG).show();
+        }
+        else{
+            return;
+        }
     }
 }

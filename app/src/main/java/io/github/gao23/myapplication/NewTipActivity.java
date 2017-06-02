@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -131,6 +133,12 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(3);
                 }
                 result = new Entry(chargedAmount,orderNum,payment);
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(intentCode.parb, result);
+                intent.putExtras(bundle);
+                this.setResult(intentCode.CHECK);
+                this.finish();
             }
             else{
                 double tipAmount;
@@ -145,6 +153,12 @@ public class NewTipActivity extends AppCompatActivity {
                     throw new InvalidInputException(4);
                 }
                 result = new Entry(tipAmount,orderAddress,isCashTip);
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(intentCode.parb, result);
+                intent.putExtras(bundle);
+                this.setResult(intentCode.CHECK);
+                this.finish();
             }
         }
         catch (InvalidInputException e){
@@ -168,19 +182,13 @@ public class NewTipActivity extends AppCompatActivity {
     }
 
     private boolean decimalCheck(double test) {
-       String num = Double.toString(test);
-        int i = num.lastIndexOf('.');
-        if(i != -1 && num.substring(i + 1).length() == 2) {
-            return true;
-        }
-        else{
-            return false;
-        }
+        String text = Double.toString(Math.abs(test));
+        int integerPlaces = text.indexOf('.');
+        int decimalPlaces = text.length() - integerPlaces - 1;
+       return decimalPlaces == 2;
     }
 
-    private void terminateActivity(){
-        Intent intent = new Intent();
-    }
+
 
 
 
