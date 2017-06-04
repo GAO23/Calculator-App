@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private static double totalEarnings = 0.00;
     private  ListView list;
     private ArrayList<Entry> todayEntry;
-    private ArrayAdapter<Entry> entryArrayAdapterr;
+    private ArrayAdapter<Entry> entryArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         list = (ListView) findViewById(R.id.listView);
         todayEntry = new ArrayList<Entry>();
-        entryArrayAdapterr = new ArrayAdapter<Entry>(this,android.R.layout.simple_list_item_1,todayEntry);
+        entryArrayAdapter = new entryAdaptor(this, todayEntry);
+        list.setAdapter(entryArrayAdapter);
     }
 
     public void onClick(View v){
@@ -35,9 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == intentCode.CHECK) {
             Entry entry = data.getParcelableExtra(intentCode.parb);
-            String test = Double.toString(entry.getEntry());
-            Log.d("test342", test);
+            todayEntry.add(entry);
+        }
+        else{
+            return;
+        }
         }
 
 

@@ -172,7 +172,7 @@ public class NewTipActivity extends AppCompatActivity {
                     Toast.makeText(this.getApplicationContext(), "Make sure payment amount has two decimals only for cents", Toast.LENGTH_LONG).show();
                     break;
                 case 7:
-                    Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals for only cents", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -193,7 +193,13 @@ public class NewTipActivity extends AppCompatActivity {
 }
 
 
-      private void terminate(Entry result){
+    @Override
+    public void onBackPressed() {
+        this.setResult(intentCode.INVALID);
+        finish();
+    }
+
+    private void terminate(Entry result){
           Intent intent = new Intent();
           intent.putExtra(intentCode.parb, result);
           this.setResult(intentCode.CHECK, intent);
