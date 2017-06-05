@@ -8,62 +8,44 @@ import android.os.Parcelable;
  */
 
 public class Entry implements Parcelable{
-    private double unpaidEntry;
+    private double entry;
     private int unpaidSubEntry;
     private double customerPayment;
-    private double paidEntry;
     private String paidSubEntry;
     private boolean cashTip = false;
     private boolean paidFlag = false;
 
     public Entry (double unpaidEntry, int unpaidSubEntry, double customerPayment){
-         this.unpaidEntry = unpaidEntry;
+         this.entry = unpaidEntry;
          this.unpaidSubEntry = unpaidSubEntry;
          this.customerPayment = customerPayment;
     }
 
     public Entry(double paidEntry, String paiSubEntry, boolean cashTip){
-        this.paidEntry = paidEntry;
+        this.entry = paidEntry;
         this.paidSubEntry = paiSubEntry;
         this.cashTip = cashTip;
         paidFlag = true;
     }
 
     public double getEntry(){
-        if(paidFlag) {
-            return paidEntry;
-        }
-        else{
-            return unpaidEntry;
-        }
+       return entry;
     }
 
     public int getUnpaidSubEntry() {
-       if(paidFlag){
-           throw new PaidUnpaidException();
-       }
        return unpaidSubEntry;
     }
 
     public String getPaidSubEntry(){
-        if(!paidFlag){
-            throw new PaidUnpaidException();
-        }
         return paidSubEntry;
     }
 
     public double getCustomerPayment() {
-        if(paidFlag){
-            throw new PaidUnpaidException();
-        }
-        return customerPayment;
+        return this.customerPayment;
     }
 
     public boolean isCashiTip(){
-        if(!paidFlag){
-            throw new PaidUnpaidException();
-        }
-        return cashTip;
+        return this.cashTip;
     }
 
     public boolean isPaid(){
@@ -78,20 +60,20 @@ public class Entry implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(this.unpaidEntry);
+        dest.writeDouble(this.entry);
         dest.writeInt(this.unpaidSubEntry);
         dest.writeDouble(this.customerPayment);
-        dest.writeDouble(this.paidEntry);
+        dest.writeDouble(this.entry);
         dest.writeString(this.paidSubEntry);
         dest.writeByte(this.cashTip ? (byte) 1 : (byte) 0);
         dest.writeByte(this.paidFlag ? (byte) 1 : (byte) 0);
     }
 
     protected Entry(Parcel in) {
-        this.unpaidEntry = in.readDouble();
+        this.entry = in.readDouble();
         this.unpaidSubEntry = in.readInt();
         this.customerPayment = in.readDouble();
-        this.paidEntry = in.readDouble();
+        this.entry = in.readDouble();
         this.paidSubEntry = in.readString();
         this.cashTip = in.readByte() != 0;
         this.paidFlag = in.readByte() != 0;
