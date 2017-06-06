@@ -117,18 +117,28 @@ public class NewTipActivity extends AppCompatActivity {
                     if (!decimalCheck(chargedAmount)) {
                         throw new InvalidInputException(5);
                     }
+                    if(chargedAmount<0){
+                        throw new InvalidInputException(8);
+                    }
                 } catch (NumberFormatException e) {
                     throw new InvalidInputException(1);
                 }
                 try {
                     orderNum = Integer.parseInt(subEntry.getText().toString());
-                } catch (NumberFormatException e) {
+                    if(orderNum<0){
+                        throw new InvalidInputException(8);
+                    }
+                }
+                catch (NumberFormatException e) {
                     throw new InvalidInputException(2);
                 }
                 try {
                     payment = Double.parseDouble(customerPayment.getText().toString());
                     if (!decimalCheck(payment)) {
                         throw new InvalidInputException(6);
+                    }
+                    if(payment<0){
+                        throw new InvalidInputException(8);
                     }
                 } catch (NumberFormatException e) {
                     throw new InvalidInputException(3);
@@ -143,6 +153,9 @@ public class NewTipActivity extends AppCompatActivity {
                     tipAmount = Double.parseDouble(entry.getText().toString());
                     if (!decimalCheck(tipAmount)) {
                         throw new InvalidInputException(7);
+                    }
+                    if(tipAmount<0){
+                        throw new InvalidInputException(8);
                     }
                 } catch (NumberFormatException e) {
                     throw new InvalidInputException(4);
@@ -173,6 +186,9 @@ public class NewTipActivity extends AppCompatActivity {
                     break;
                 case 7:
                     Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
+                    break;
+                case 8: Toast.makeText(this.getApplicationContext(), "One of the field is a negative value. Only positive is allowed.", Toast.LENGTH_LONG).show();
+                    break;
             }
         }
     }

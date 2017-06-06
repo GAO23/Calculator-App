@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +37,7 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
     }
 
     public void setPaidEntry(TextView view, Entry entry){
-        double customerTip = Math.round(entry.getEntry()*100)/100;
+        double customerTip = entry.getEntry();
         String address = entry.getPaidSubEntry();
         String isCashTip = "";
         if(entry.isCashiTip()){
@@ -45,15 +46,33 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
         else{
             isCashTip = "No";
         }
-        view.setText("Computer Tip: $" + Double.toString(customerTip) + "\nAddress: " + address + "\nCash Tip: " + isCashTip);
+        String zero = "";
+        zero = this.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(customerTip)));
+        view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nAddress: " + address + "\nCash Tip: " + isCashTip);
     }
 
     public void setUnpaidEntry(TextView view, Entry entry){
-        double charge = Math.round(entry.getEntry()*100)/100;
+        double charge = entry.getEntry();
         int orderNum = entry.getUnpaidSubEntry();
         double payment = entry.getCustomerPayment();
-        view.setText("Cash Tip: $" + Double.toString(payment - charge) + "\nOrder Number: #" + orderNum);
+        DecimalFormat df = new DecimalFormat("#.##");
+        String zero = "";
+        zero = this.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(payment-charge)));
+
+        view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment-charge) + zero + "\nOrder Number: #" + orderNum);
+    }
+public String checkIfZeroNeeded(double test){
+    String num =  Double.toString(test);
+    int i = num.lastIndexOf('.');
+        if(test % 1 == 0){
+            return ".00";
+        } if(i != -1 && num.substring(i + 1).length() == 1){
+        return "0";
+    }
+    else{
+        return "";
     }
 
+}
 
 }
