@@ -20,16 +20,40 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // entry for this position
         Entry entry = getItem(position);
-
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listlayout, parent, false);
         }
-        TextView view = (TextView) convertView.findViewById(android.R.id.text1);
-
-        view.setText(Double.toString(entry.getEntry()));
+        TextView view = (TextView) convertView.findViewById(R.id.text1);
+        if(entry.isPaid()){
+            this.setPaidEntry(view, entry);
+        }
+        else{
+            this.setUnpaidEntry(view,entry);
+        }
 
         return convertView;
     }
+
+    public void setPaidEntry(TextView view, Entry entry){
+        double customerTip = Math.round(entry.getEntry()*100)/100;
+        String address = entry.getPaidSubEntry();
+        String isCashTip = "";
+        if(entry.isCashiTip()){
+            isCashTip = "Yes";
+        }
+        else{
+            isCashTip = "No";
+        }
+        view.setText("Computer Tip: $" + Double.toString(customerTip) + "\nAddress: " + address + "\nCash Tip: " + isCashTip);
+    }
+
+    public void setUnpaidEntry(TextView view, Entry entry){
+        double charge = Math.round(entry.getEntry()*100)/100;
+        int orderNum = entry.getUnpaidSubEntry();
+        double payment = entry.getCustomerPayment();
+        view.setText("Cash Tip: $" + Double.toString(payment - charge) + "\nOrder Number: #" + orderNum);
+    }
+
+
 }

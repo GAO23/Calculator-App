@@ -49,7 +49,7 @@ public class Entry implements Parcelable{
     }
 
     public boolean isPaid(){
-        return isPaid();
+        return paidFlag;
     }
 
 

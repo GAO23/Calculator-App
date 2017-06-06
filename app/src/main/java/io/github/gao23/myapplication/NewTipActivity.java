@@ -178,7 +178,7 @@ public class NewTipActivity extends AppCompatActivity {
     }
 
     private boolean decimalCheck(double test) {
-        String num =  Double.toString(test);  // I assume that is `String` because entered by user and not yet converted to `double`
+        String num =  Double.toString(test);
         int i = num.lastIndexOf('.');
         if(test % 1 == 0){
             return true;
