@@ -14,11 +14,13 @@ public class Entry implements Parcelable{
     private String paidSubEntry;
     private boolean cashTip = false;
     private boolean paidFlag = false;
+    private boolean receiptForgot = false;
 
-    public Entry (double unpaidEntry, int unpaidSubEntry, double customerPayment){
+    public Entry (double unpaidEntry, int unpaidSubEntry, double customerPayment, boolean receiptForgot){
          this.entry = unpaidEntry;
          this.unpaidSubEntry = unpaidSubEntry;
          this.customerPayment = customerPayment;
+        this.receiptForgot = receiptForgot;
     }
 
     public Entry(double paidEntry, String paiSubEntry, boolean cashTip){
@@ -44,12 +46,16 @@ public class Entry implements Parcelable{
         return this.customerPayment;
     }
 
-    public boolean isCashiTip(){
+    public boolean isCashTip(){
         return this.cashTip;
     }
 
     public boolean isPaid(){
         return paidFlag;
+    }
+
+    public boolean isReceiptForgot(){
+        return this.receiptForgot;
     }
 
 
@@ -67,6 +73,7 @@ public class Entry implements Parcelable{
         dest.writeString(this.paidSubEntry);
         dest.writeByte(this.cashTip ? (byte) 1 : (byte) 0);
         dest.writeByte(this.paidFlag ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.receiptForgot ? (byte) 1 : (byte) 0);
     }
 
     protected Entry(Parcel in) {
@@ -77,6 +84,7 @@ public class Entry implements Parcelable{
         this.paidSubEntry = in.readString();
         this.cashTip = in.readByte() != 0;
         this.paidFlag = in.readByte() != 0;
+        this.receiptForgot = in.readByte() != 0;
     }
 
     public static final Creator<Entry> CREATOR = new Creator<Entry>() {

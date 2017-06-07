@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == intentCode.CHECK) {
             Entry entry = data.getParcelableExtra(intentCode.parb);
             todayEntry.add(entry);
+            entryArrayAdapter.notifyDataSetChanged();
         }
         else{
             return;

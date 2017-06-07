@@ -13,7 +13,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10.0sp"></ListView>
+        android:dividerHeight="10.0sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight = "10dp"
+        android:layout_marginTop="10dp"></ListView>
 
 
     <android.support.design.widget.FloatingActionButton

@@ -27,6 +27,8 @@ public class NewTipActivity extends AppCompatActivity {
     private RelativeLayout view;
     private LayoutParams lp1;
     private LayoutParams lp2;
+    private LayoutParams lp3;
+    private CheckBox receiptBack;
     private boolean viewAddedFlag = false;
 
     @Override
@@ -48,6 +50,7 @@ public class NewTipActivity extends AppCompatActivity {
         lp1.addRule(RelativeLayout.BELOW, entry.getId());
         lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp2.addRule(RelativeLayout.BELOW, subEntry.getId());
+        lp3 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     }
 
     public void newUnpaidOrderClicked(View v) {
@@ -68,11 +71,17 @@ public class NewTipActivity extends AppCompatActivity {
             customerPayment = new EditText(this);
             customerPayment.setHint("Enter customer payment amount");
             customerPayment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
+            customerPayment.setId(3);
             view.addView(customerPayment, lp2);
+            receiptBack = new CheckBox(this);
+            receiptBack.setText("Check this box if you did not bring back the receipt.");
+            lp3.addRule(RelativeLayout.BELOW, customerPayment.getId());
+            view.addView(receiptBack, lp3);
         }
         if (customerPayment != null) {
             customerPayment.setText("");
             customerPayment.setHint("Enter customer payment amount");
+            receiptBack.setChecked(false);
         }
     }
 
@@ -90,6 +99,8 @@ public class NewTipActivity extends AppCompatActivity {
         if (customerPayment != null) {
             view.removeView(customerPayment);
             customerPayment = null;
+            view.removeView(receiptBack);
+            receiptBack = null;
         }
         if (cashTip == null) {
             cashTip = new CheckBox(this);
@@ -143,7 +154,7 @@ public class NewTipActivity extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     throw new InvalidInputException(3);
                 }
-                result = new Entry(chargedAmount, orderNum, payment);
+                result = new Entry(chargedAmount, orderNum, payment, receiptBack.isChecked());
                 this.terminate(result);
             } else {
                 double tipAmount;

@@ -1,6 +1,7 @@
 package io.github.gao23.myapplication;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,16 +40,16 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
     public void setPaidEntry(TextView view, Entry entry){
         double customerTip = entry.getEntry();
         String address = entry.getPaidSubEntry();
-        String isCashTip = "";
-        if(entry.isCashiTip()){
-            isCashTip = "Yes";
-        }
-        else{
-            isCashTip = "No";
-        }
         String zero = "";
         zero = this.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(customerTip)));
-        view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nAddress: " + address + "\nCash Tip: " + isCashTip);
+        if(entry.isCashTip()){
+            view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nAddress: " + address + "\nThis is cash tip!");
+            view.setTextColor(Color.BLUE);
+        }
+        else{
+            view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nAddress: " + address);
+            view.setTextColor(Color.BLACK);
+        }
     }
 
     public void setUnpaidEntry(TextView view, Entry entry){
@@ -58,9 +59,20 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
         DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";
         zero = this.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(payment-charge)));
+        if(entry.isReceiptForgot()) {
+            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder Number: #" + orderNum + "\nYou forgot the receipt OMG!");
+            view.setTextColor(Color.RED);
+        }
+        else {
+            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder Number: #" + orderNum);
+            view.setTextColor(Color.BLACK);
+        }
+        if(payment-charge < 0) {
+            view.setText(view.getText() + "\nDid you undercharged the customer or something?? O.o");
+            view.setTextColor(Color.parseColor("#800080"));
+        }
+        }
 
-        view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment-charge) + zero + "\nOrder Number: #" + orderNum);
-    }
 public String checkIfZeroNeeded(double test){
     String num =  Double.toString(test);
     int i = num.lastIndexOf('.');
