@@ -37,16 +37,18 @@ public class editTextChangeListener implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (entry.getText().length() == 0 || subEntry.getText().length() == 0) {
-            save.setEnabled(false);
-        } else {
-            save.setEnabled(true);
-        }
         if(!isComputer){
-            if(customerPayment.getText().length() == 0){
+            if(customerPayment.getText().length() == 0 || entry.getText().length() == 0 || subEntry.getText().length() == 0){
                 save.setEnabled(false);
             }
             else {
+                save.setEnabled(true);
+            }
+        }
+        else {
+            if (entry.getText().length() == 0 || subEntry.getText().length() == 0) {
+                save.setEnabled(false);
+            } else {
                 save.setEnabled(true);
             }
         }

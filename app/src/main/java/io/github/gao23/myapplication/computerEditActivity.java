@@ -88,23 +88,8 @@ public class computerEditActivity extends AppCompatActivity {
         }catch (InvalidInputException e) {
             int errorCode = e.getErrorCode();
             switch (errorCode) {
-                case 1:
-                    Toast.makeText(this.getApplicationContext(), "Invalid charged amount", Toast.LENGTH_LONG).show();
-                    break;
-                case 2:
-                    Toast.makeText(this.getApplicationContext(), "Order number needs to be a whole number", Toast.LENGTH_LONG).show();
-                    break;
-                case 3:
-                    Toast.makeText(this.getApplicationContext(), "Invalid payment amount", Toast.LENGTH_LONG).show();
-                    break;
                 case 4:
                     Toast.makeText(this.getApplicationContext(), "Invalid tip amount", Toast.LENGTH_LONG).show();
-                    break;
-                case 5:
-                    Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
-                    break;
-                case 6:
-                    Toast.makeText(this.getApplicationContext(), "Make sure payment amount has two decimals only for cents", Toast.LENGTH_LONG).show();
                     break;
                 case 7:
                     Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
