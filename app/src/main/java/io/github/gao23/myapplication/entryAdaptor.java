@@ -16,22 +16,44 @@ import java.util.ArrayList;
  */
 
 public class entryAdaptor extends ArrayAdapter<Entry> {
+    private LayoutInflater mInflator;
     public entryAdaptor(Context context, ArrayList<Entry> todayEntry){
         super(context, 0, todayEntry);
+        mInflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Entry entry = getItem(position);
+        ViewHolder holder = null;
+        int type = this.getItemViewType(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listlayout, parent, false);
+            switch(type){
+            case 0:
+                holder = new ViewHolder();
+                convertView = mInflator.inflate(R.layout.placeholderlistlayout, parent, false);
+                holder.textView = (TextView)convertView.findViewById(R.id.holderText);
+                 break;
+                case 1: holder = new ViewHolder();
+                convertView = mInflator.inflate(R.layout.listlayout, parent, false);
+                holder.textView = (TextView)convertView.findViewById(R.id.text1);
+                    break;
+            }
+            convertView.setTag(holder);
         }
-        TextView view = (TextView) convertView.findViewById(R.id.text1);
-        if(entry.isPaid()){
-            this.setPaidEntry(view, entry);
+        else {
+            holder = (ViewHolder)convertView.getTag();
+        }
+
+        if(type == 1) {
+            if (entry.isPaid()) {
+                this.setPaidEntry(holder.textView, entry);
+            } else {
+                this.setUnpaidEntry(holder.textView, entry);
+            }
         }
         else{
-            this.setUnpaidEntry(view,entry);
+            holder.textView.setText(entry.getSummaryMessage());
         }
 
         return convertView;
@@ -73,7 +95,7 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
         }
         }
 
-public String checkIfZeroNeeded(double test){
+   public String checkIfZeroNeeded(double test){
     String num =  Double.toString(test);
     int i = num.lastIndexOf('.');
         if(test % 1 == 0){
@@ -86,5 +108,25 @@ public String checkIfZeroNeeded(double test){
     }
 
 }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(this.getItem(position).getSummaryFlag()){
+            return 0;
+        }
+        else{
+            return 1;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+
+    public static class ViewHolder {
+        public TextView textView;
+    }
 
 }

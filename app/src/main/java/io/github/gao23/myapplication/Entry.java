@@ -15,6 +15,8 @@ public class Entry implements Parcelable{
     private boolean cashTip = false;
     private boolean paidFlag = false;
     private boolean receiptForgot = false;
+    private boolean summaryFlag = false;
+    private String summaryMessage;
 
     public Entry (double unpaidEntry, int unpaidSubEntry, double customerPayment, boolean receiptForgot){
          this.entry = unpaidEntry;
@@ -28,6 +30,11 @@ public class Entry implements Parcelable{
         this.paidSubEntry = paiSubEntry;
         this.cashTip = cashTip;
         paidFlag = true;
+    }
+
+    public Entry (String summaryMessage){
+       this.summaryFlag = true;
+        this.summaryMessage = summaryMessage;
     }
 
     public double getEntry(){
@@ -54,9 +61,14 @@ public class Entry implements Parcelable{
         return paidFlag;
     }
 
-    public boolean isReceiptForgot(){
+    public boolean isReceiptForgot() {
         return this.receiptForgot;
     }
+    public String getSummaryMessage(){
+        return this.summaryMessage;
+    }
+
+    public boolean getSummaryFlag(){return this.summaryFlag;}
 
 
     @Override
@@ -74,6 +86,8 @@ public class Entry implements Parcelable{
         dest.writeByte(this.cashTip ? (byte) 1 : (byte) 0);
         dest.writeByte(this.paidFlag ? (byte) 1 : (byte) 0);
         dest.writeByte(this.receiptForgot ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.summaryFlag ? (byte) 1 : (byte) 0);
+        dest.writeString(this.summaryMessage);
     }
 
     protected Entry(Parcel in) {
@@ -85,6 +99,8 @@ public class Entry implements Parcelable{
         this.cashTip = in.readByte() != 0;
         this.paidFlag = in.readByte() != 0;
         this.receiptForgot = in.readByte() != 0;
+        this.summaryFlag = in.readByte() != 0;
+        this.summaryMessage = in.readString();
     }
 
     public static final Creator<Entry> CREATOR = new Creator<Entry>() {
@@ -98,4 +114,7 @@ public class Entry implements Parcelable{
             return new Entry[size];
         }
     };
+    public void setSummaryMessage(String message){
+        this.summaryMessage = message;
+    }
 }
