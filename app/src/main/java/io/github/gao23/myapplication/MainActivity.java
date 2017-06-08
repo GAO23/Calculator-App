@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         todayEntry = new ArrayList<Entry>();
         entryArrayAdapter = new entryAdaptor(this, todayEntry);
         list.setAdapter(entryArrayAdapter);
+        list.setOnItemClickListener(new itemListener());
     }
 
     public void onClick(View v){
@@ -42,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
-
         if(resultCode == intentCode.CHECK) {
             Entry entry = data.getParcelableExtra(intentCode.parb);
             if(entry.isPaid()){
@@ -69,22 +68,21 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             return;
-         }
         }
+    }
 
 
-        public void addComputerTip(Entry entry){
-            if(totalComputerNum == 0){
-                this.todayEntry.add(0,new Entry(""));
-            }
-            todayEntry.add(1, entry);
+    public void addComputerTip(Entry entry){
+        if(totalComputerNum == 0){
+            this.todayEntry.add(0,new Entry(""));
         }
+        todayEntry.add(1, entry);
+    }
 
-        public void addCashTip(Entry entry) {
-            if (totalCashNum == 0) {
-                this.todayEntry.add(new Entry(""));
-            }
-
+    public void addCashTip(Entry entry) {
+        if (totalCashNum == 0) {
+            this.todayEntry.add(new Entry(""));
+        }
             for (int i = totalComputerNum + 1; i < todayEntry.size(); i++) {
                 if (entry.getUnpaidSubEntry() < todayEntry.get(i).getUnpaidSubEntry()) {
                     todayEntry.add(i, entry);
@@ -92,31 +90,53 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if (!this.todayEntry.contains(entry)) {
-                this.todayEntry.add(entry);
-            }
 
+        if (!this.todayEntry.contains(entry)) {
+            this.todayEntry.add(entry);
         }
 
-        public void updateComputerSummary(){
+    }
+
+    public void updateComputerSummary(){
+        String zero = "";
+        zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalComputerEarning)));
+        String result = new DecimalFormat("#.##").format(totalComputerEarning) + zero;
+        entryArrayAdapter.getItem(0).setSummaryMessage("Total Computer Orders: " + Integer.toString(totalComputerNum)  + "\nCash Tip: " + Integer.toString(cashTipNum) + "\nTotal Computer Earnings: $" + result);
+    }
+
+    public void updateCashSummary(){
+        if(totalComputerNum == 0){
             String zero = "";
-            zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalComputerEarning)));
-            String result = new DecimalFormat("#.##").format(totalComputerEarning) + zero;
-            entryArrayAdapter.getItem(0).setSummaryMessage("Total Computer Orders: " + Integer.toString(totalComputerNum)  + "\nCash Tip: " + Integer.toString(cashTipNum) + "\nTotal Computer Earnings: $" + result);
+            zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
+            String result = new DecimalFormat("#.##").format(totalCashEarning) + zero;
+            entryArrayAdapter.getItem(0).setSummaryMessage("Total Cash Orders: " + Integer.toString(totalCashNum) + "\nForgotten Receipt: " + Integer.toString(forgottenReceipt) +"\nTotal Cash Earnings: $" + result);
         }
+        else{
+            String zero = "";
+            zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
+            String result = new DecimalFormat("#.##").format(totalCashEarning) + zero;
+            entryArrayAdapter.getItem(totalComputerNum+1).setSummaryMessage("Total Cash Orders: " + Integer.toString(totalCashNum) + "\nForgotten Receipt: " + Integer.toString(forgottenReceipt)  +"\nTotal Cash Earnings: $" + result);
+        }
+    }
 
-        public void updateCashSummary(){
-            if(totalComputerNum == 0){
-                String zero = "";
-                zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
-                String result = new DecimalFormat("#.##").format(totalCashEarning) + zero;
-                entryArrayAdapter.getItem(0).setSummaryMessage("Total Cash Orders: " + Integer.toString(totalCashNum) + "\nForgotten Receipt: " + Integer.toString(forgottenReceipt) +"\nTotal Cash Earnings: $" + result);
-            }
-            else{
-                String zero = "";
-                zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
-                String result = new DecimalFormat("#.##").format(totalCashEarning) + zero;
-                entryArrayAdapter.getItem(totalComputerNum).setSummaryMessage("Total Cash Orders: " + Integer.toString(totalCashNum) + "\nForgotten Receipt: $" + Integer.toString(forgottenReceipt)  +"\nTotal Cash Earnings: $" + result);
+        private  class itemListener implements AdapterView.OnItemClickListener{
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                  if(!entryArrayAdapter.getItem(position).getSummaryFlag() && entryArrayAdapter.getItem(position).isPaid()){
+                      Intent intent = new Intent();
+                      intent.putExtra(intentCode.parb2, entryArrayAdapter.getItem(position));
+                      intent.setClass(MainActivity.this, computerEditActivity.class);
+                      startActivityForResult(intent, intentCode.PASS);
+                  }
+                else if(!entryArrayAdapter.getItem(position).getSummaryFlag() && !entryArrayAdapter.getItem(position).isPaid()){
+                    Intent intent = new Intent();
+                    intent.putExtra(intentCode.parb2, entryArrayAdapter.getItem(position));
+                    intent.setClass(MainActivity.this, cashEditActivity.class);
+                    startActivityForResult(intent, intentCode.PASS);
+                }
+                else if(!entryArrayAdapter.getItem(position).getSummaryFlag()){
+                      return;
+                  }
             }
         }
 

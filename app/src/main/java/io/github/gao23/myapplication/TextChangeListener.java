@@ -27,6 +27,7 @@ public class TextChangeListener implements TextWatcher{
 
 
 
+
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -34,22 +35,21 @@ public class TextChangeListener implements TextWatcher{
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (!act.isCashTipNull()) {
-            if (entry.getText().length() == 0 || subentry.getText().length() == 0) {
-                button.setEnabled(false);
+            if (!act.isCashTipNull()) {
+                if (entry.getText().length() == 0 || subentry.getText().length() == 0) {
+                    button.setEnabled(false);
+                } else {
+                    button.setEnabled(true);
+                }
             } else {
-                button.setEnabled(true);
+                if (entry.getText().length() == 0 || subentry.getText().length() == 0) {
+                    button.setEnabled(false);
+                } else if (customerPayment != null && customerPayment.getText().length() == 0) {
+                    button.setEnabled(false);
+                } else {
+                    button.setEnabled(true);
+                }
             }
-        }
-        else {
-            if (entry.getText().length() == 0 || subentry.getText().length() == 0) {
-                button.setEnabled(false);
-            } else if (customerPayment != null && customerPayment.getText().length() == 0) {
-                button.setEnabled(false);
-            } else {
-                button.setEnabled(true);
-            }
-        }
     }
 
     @Override
