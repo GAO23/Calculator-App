@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 totalComputerEarning += entry.getEntry();
                 this.updateComputerSummary();
+                Toast.makeText(this.getApplicationContext(), "New computer entry saved", Toast.LENGTH_LONG).show();
             }
             else{
                 this.addCashTip(entry);
@@ -63,10 +64,45 @@ public class MainActivity extends AppCompatActivity {
                 }
                 totalCashEarning += entry.getCustomerPayment()-entry.getEntry();
                 this.updateCashSummary();
+                Toast.makeText(this.getApplicationContext(), "New cash entry saved", Toast.LENGTH_LONG).show();
             }
             entryArrayAdapter.notifyDataSetChanged();
         }
-        else {
+
+        else if(resultCode==intentCode.COMPUTERCHECK){
+            double tipDifferences = data.getDoubleExtra(intentCode.compTipDifferences,0.0);
+            int isCashDifferences = data.getIntExtra(intentCode.isCashTipDifferences,0);
+            totalComputerEarning += tipDifferences;
+            cashTipNum += isCashDifferences;
+            int position = data.getIntExtra("position",0);
+            this.todayEntry.remove(position);
+            this.todayEntry.add(position, (Entry) data.getParcelableExtra(intentCode.parb2));
+            this.updateComputerSummary();
+            this.entryArrayAdapter.notifyDataSetChanged();
+            Toast.makeText(this.getApplicationContext(), "Entry Modified", Toast.LENGTH_LONG).show();
+        }
+
+       else if(resultCode == intentCode.COMPUTERDELETE){
+            int position = data.getIntExtra("position",0);
+            totalComputerEarning -= this.todayEntry.get(position).getEntry();
+            totalComputerNum -=1;
+            if( this.todayEntry.get(position).isCashTip()){
+                cashTipNum -= 1;
+            }
+            this.todayEntry.remove(position);
+            if(totalComputerNum == 0){
+                todayEntry.remove(0);
+            }
+            else {
+                this.updateComputerSummary();
+            }
+            entryArrayAdapter.notifyDataSetChanged();
+            Toast.makeText(this.getApplicationContext(), "Successfully Removed", Toast.LENGTH_LONG).show();
+        }
+
+
+        else if(resultCode==intentCode.INVALID){
+            Toast.makeText(this.getApplicationContext(), "Action Canceled", Toast.LENGTH_LONG).show();
             return;
         }
     }
@@ -124,15 +160,17 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                   if(!entryArrayAdapter.getItem(position).getSummaryFlag() && entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
-                      intent.putExtra(intentCode.parb2, entryArrayAdapter.getItem(position));
+                      intent.putExtra("position", position);
+                      intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, computerEditActivity.class);
                       startActivityForResult(intent, intentCode.PASS);
                   }
                 else if(!entryArrayAdapter.getItem(position).getSummaryFlag() && !entryArrayAdapter.getItem(position).isPaid()){
-                    Intent intent = new Intent();
-                    intent.putExtra(intentCode.parb2, entryArrayAdapter.getItem(position));
-                    intent.setClass(MainActivity.this, cashEditActivity.class);
-                    startActivityForResult(intent, intentCode.PASS);
+                      Intent intent = new Intent();
+                      intent.putExtra("position", position);
+                      intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
+                      intent.setClass(MainActivity.this, cashEditActivity.class);
+                     startActivityForResult(intent, intentCode.PASS);
                 }
                 else if(!entryArrayAdapter.getItem(position).getSummaryFlag()){
                       return;

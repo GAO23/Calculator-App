@@ -1,10 +1,13 @@
 package io.github.gao23.myapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,7 +27,7 @@ public class computerEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_computer_edit);
-        initialEntry = this.getIntent().getParcelableExtra(intentCode.parb2);
+        initialEntry = this.getIntent().getParcelableExtra(intentCode.parb);
         entry = (EditText) findViewById(R.id.computerEditText1);
         entry.setHint("Enter new tip amount");
         subEntry = (EditText) findViewById(R.id.computerEditTExt2);
@@ -32,12 +35,12 @@ public class computerEditActivity extends AppCompatActivity {
         cashTip = (CheckBox) findViewById(R.id.computerCheckBox1);
         save = (Button) findViewById(R.id.computerSave);
         delete = (Button) findViewById(R.id.computerDelete);
-        intialSetUp();
+        initialSetUp();
         subEntry.addTextChangedListener(new editTextChangeListener(save, entry, subEntry));
         entry.addTextChangedListener(new editTextChangeListener(save, entry, subEntry));
     }
 
-    private void intialSetUp(){
+    private void initialSetUp(){
        DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";
         zero = checkIfZeroNeeded(initialEntry.getEntry());
@@ -84,7 +87,12 @@ public class computerEditActivity extends AppCompatActivity {
                 throw new InvalidInputException(4);
             }
             Entry result = new Entry(tipAmount, orderAddress, isCashTip);
-            this.terminate(result);
+            if(this.modified(result)){
+                this.Confirmation(result);
+            }
+            else{
+                this.unmodifiedSaved();
+            }
         }catch (InvalidInputException e) {
             int errorCode = e.getErrorCode();
             switch (errorCode) {
@@ -100,13 +108,42 @@ public class computerEditActivity extends AppCompatActivity {
         }
     }
 
+    public boolean modified (Entry result){
+        boolean isModified = false;
+        if (result.getEntry() != initialEntry.getEntry()){
+            isModified = true;
+        }
+        else if(isModified != true && !result.getPaidSubEntry().equals(initialEntry.getPaidSubEntry())){
+            isModified = true;
+        }
+        else if(isModified != true && !result.isCashTip()==initialEntry.isCashTip()){
+            isModified = true;
+        }
+        return isModified;
+    }
+
     public void computerDelete(View view) {
+        this.deleteConfirmed();
+
     }
 
     private void terminate(Entry result){
         Intent intent = new Intent();
-        intent.putExtra(intentCode.parb, result);
-        this.setResult(intentCode.CHECK2, intent);
+        intent.putExtra(intentCode.parb, initialEntry);
+        intent.putExtra(intentCode.parb2, result);
+        int position = this.getIntent().getIntExtra("position",0)
+;        intent.putExtra("position", position);
+        double compTipDifferences = result.getEntry()-initialEntry.getEntry();
+        int compCashTipDifferences = 0;
+        if(initialEntry.isCashTip() && !result.isCashTip()){
+            compCashTipDifferences = -1;
+        }
+        if(!initialEntry.isCashTip() && result.isCashTip()){
+            compCashTipDifferences = 1;
+        }
+        intent.putExtra(intentCode.compTipDifferences, compTipDifferences);
+        intent.putExtra(intentCode.isCashTipDifferences, compCashTipDifferences);
+        this.setResult(intentCode.COMPUTERCHECK, intent);
         this.finish();
     }
 
@@ -124,6 +161,70 @@ public class computerEditActivity extends AppCompatActivity {
         }
 
     }
+    private void Confirmation(final Entry result) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        terminate(result);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Confirm save?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    public void deleteTermination(){
+        Intent intent = new Intent();
+        int position = this.getIntent().getIntExtra("position",0);
+        intent.putExtra("position", position);
+        this.setResult(intentCode.COMPUTERDELETE, intent);
+        finish();
+    }
+
+    private void deleteConfirmed() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        deleteTermination();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Confirm Deletion?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+
+    public void unmodifiedSaved() {
+    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+    alertDialog.setTitle("Alert");
+    alertDialog.setMessage("Nothing is modified");
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    onBackPressed();
+                }
+            });
+    alertDialog.show();
+}
 
 
 }

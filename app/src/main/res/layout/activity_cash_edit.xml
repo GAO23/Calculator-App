@@ -46,7 +46,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/cashCheckBox"
-        android:text="Save" />
+        android:text="Save"
+        android:onClick="cashSave"/>
 
     <Button
         android:id="@+id/cashDeleteButton"
@@ -57,6 +58,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/cashSaveButton"
-        android:text="Delete" />
+        android:text="Delete"
+        android:onClick="cashDelete"/>
 
 </RelativeLayout>

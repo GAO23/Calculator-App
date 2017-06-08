@@ -186,7 +186,7 @@ public class NewTipActivity extends AppCompatActivity {
                     Toast.makeText(this.getApplicationContext(), "Invalid tip amount", Toast.LENGTH_LONG).show();
                     break;
                 case 5:
-                    Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this.getApplicationContext(), "Make sure charged amount has two decimals only for cents", Toast.LENGTH_LONG).show();
                     break;
                 case 6:
                     Toast.makeText(this.getApplicationContext(), "Make sure payment amount has two decimals only for cents", Toast.LENGTH_LONG).show();
