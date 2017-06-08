@@ -100,6 +100,37 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(), "Successfully Removed", Toast.LENGTH_LONG).show();
         }
 
+        else if(resultCode == intentCode.CASHCHECK){
+            double tipDifferences = data.getDoubleExtra(intentCode.cashTipDifferences,0.0);
+            int forgottenDifferences = data.getIntExtra(intentCode.forgottenDifferences,0);
+            totalCashEarning += tipDifferences;
+            forgottenReceipt += forgottenDifferences;
+            int position = data.getIntExtra("position",0);
+            this.todayEntry.remove(position);
+            this.addCashTip((Entry)data.getParcelableExtra(intentCode.parb2));
+            this.updateCashSummary();
+            this.entryArrayAdapter.notifyDataSetChanged();
+            Toast.makeText(this.getApplicationContext(), "Entry Modified", Toast.LENGTH_LONG).show();
+        }
+
+        else if(resultCode == intentCode.CASHDELETE){
+            int position = data.getIntExtra("position",0);
+            totalCashEarning -= (this.todayEntry.get(position).getCustomerPayment() - this.todayEntry.get(position).getEntry());
+            totalCashNum -=1;
+            if( this.todayEntry.get(position).isReceiptForgot()){
+                forgottenReceipt -= 1;
+            }
+            this.todayEntry.remove(position);
+            if(totalCashNum == 0){
+                todayEntry.remove(todayEntry.size()-1);
+            }
+            else {
+                this.updateCashSummary();
+            }
+            entryArrayAdapter.notifyDataSetChanged();
+            Toast.makeText(this.getApplicationContext(), "Successfully Removed", Toast.LENGTH_LONG).show();
+        }
+
 
         else if(resultCode==intentCode.INVALID){
             Toast.makeText(this.getApplicationContext(), "Action Canceled", Toast.LENGTH_LONG).show();

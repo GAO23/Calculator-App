@@ -151,7 +151,7 @@ public class cashEditActivity extends AppCompatActivity {
         Intent intent = new Intent();
         int position = this.getIntent().getIntExtra("position",0);
         intent.putExtra("position", position);
-        this.setResult(intentCode.COMPUTERDELETE, intent);
+        this.setResult(intentCode.CASHDELETE, intent);
         finish();
     }
 
@@ -259,5 +259,6 @@ public class cashEditActivity extends AppCompatActivity {
     }
 
     public void cashDelete(View view) {
+        this.deleteConfirmed();
     }
 }
