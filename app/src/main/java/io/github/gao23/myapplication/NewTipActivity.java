@@ -1,6 +1,7 @@
 package io.github.gao23.myapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 
 public class NewTipActivity extends AppCompatActivity {
     private Button saveButton;
+
+
+
     private EditText entry;
     private EditText subEntry;
     private EditText customerPayment;
@@ -30,6 +34,7 @@ public class NewTipActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.new_tip_layout);
         saveButton = (Button) findViewById(R.id.Save);
         this.saveButton.setEnabled(false);

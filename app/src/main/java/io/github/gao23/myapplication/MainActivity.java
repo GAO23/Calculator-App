@@ -1,13 +1,16 @@
 package io.github.gao23.myapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,14 +29,54 @@ public class MainActivity extends AppCompatActivity {
     private entryAdaptor entryArrayAdapter;
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("totalCashNum", totalCashNum);
+        outState.putInt("totalComputerNum", totalComputerNum);
+        outState.putInt("forgottenReceipt", forgottenReceipt);
+        outState.putInt("cashTipNum", cashTipNum);
+        outState.putDouble("totalComputerEarning",totalComputerEarning);
+        outState.putDouble("totalCashEarning",totalCashEarning);
+        outState.putParcelableArrayList("todayEntry",todayEntry);
+        super.onSaveInstanceState(outState);
+        Log.d("debug235 onsave",Double.toString(totalCashEarning));
+    }
+
+   /* @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState!=null) {
+            setContentView(R.layout.activity_main);
+            totalCashNum = savedInstanceState.getInt("totalCashNum", totalCashNum);
+            totalComputerNum = savedInstanceState.getInt("totalComputerNum", totalComputerNum);
+            forgottenReceipt = savedInstanceState.getInt("forgottenReceipt", forgottenReceipt);
+            cashTipNum = savedInstanceState.getInt("cashTipNum", cashTipNum);
+            totalComputerEarning = savedInstanceState.getDouble("totalComputerEarning", totalComputerEarning);
+            totalCashEarning =savedInstanceState.getDouble("totalCashEarning", totalCashEarning);
+            todayEntry = savedInstanceState.getParcelableArrayList("todayEntry");
+            list = (ListView) findViewById(R.id.listView) ;
+            entryArrayAdapter = new entryAdaptor(this,todayEntry);
+            list.setAdapter(entryArrayAdapter);
+            entryArrayAdapter.notifyDataSetChanged();
+            this.updateComputerSummary();
+            this.updateCashSummary();
+        }
+        Log.d("debug235 onrestored",Double.toString(totalCashEarning));
+    }*/
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        list = (ListView) findViewById(R.id.listView);
-        todayEntry = new ArrayList<Entry>();
-        entryArrayAdapter = new entryAdaptor(this, todayEntry);
-        list.setAdapter(entryArrayAdapter);
-        list.setOnItemClickListener(new itemListener());
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setContentView(R.layout.activity_main);
+            list = (ListView) findViewById(R.id.listView);
+            todayEntry = new ArrayList<Entry>();
+            entryArrayAdapter = new entryAdaptor(this, todayEntry);
+            list.setAdapter(entryArrayAdapter);
+            list.setOnItemClickListener(new itemListener());
+
+        Log.d("debug235 oncreate", Double.toString(totalCashEarning));
+        Log.d("debug235 oncreate", Boolean.toString(savedInstanceState == null));
     }
 
     public void onClick(View v){
@@ -136,6 +179,59 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(), "Action Canceled", Toast.LENGTH_LONG).show();
             return;
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.getMenuInflater().inflate(R.menu.action_menu, menu);
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.calculate:{
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, calculateActivity.class);
+                intent.putParcelableArrayListExtra("list",todayEntry);
+                startActivity(intent);
+                break;
+            }
+            case R.id.clear :{
+               this.clearConfirmation();
+                break;
+            }
+            case R.id.exit:{
+                 onBackPressed();
+                break;
+            }
+        }
+        return true;
+    }
+
+    private void clearConfirmation() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        todayEntry.clear();
+                        entryArrayAdapter.notifyDataSetChanged();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Confirm clear?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
 
