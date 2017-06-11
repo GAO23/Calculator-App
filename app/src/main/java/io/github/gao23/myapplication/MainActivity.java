@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
     private entryAdaptor entryArrayAdapter;
 
     @Override
+    public void onBackPressed() {
+        super.onPause();
+    }
+
+    /*@Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt("totalCashNum", totalCashNum);
         outState.putInt("totalComputerNum", totalComputerNum);
@@ -38,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         outState.putDouble("totalCashEarning",totalCashEarning);
         outState.putParcelableArrayList("todayEntry",todayEntry);
         super.onSaveInstanceState(outState);
-        Log.d("debug235 onsave",Double.toString(totalCashEarning));
-    }
+    }*/
 
-   /* @Override
+/*
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if(savedInstanceState!=null) {
@@ -60,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             this.updateComputerSummary();
             this.updateCashSummary();
         }
-        Log.d("debug235 onrestored",Double.toString(totalCashEarning));
     }*/
 
 
@@ -75,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
             list.setAdapter(entryArrayAdapter);
             list.setOnItemClickListener(new itemListener());
 
-        Log.d("debug235 oncreate", Double.toString(totalCashEarning));
-        Log.d("debug235 oncreate", Boolean.toString(savedInstanceState == null));
     }
 
     public void onClick(View v){
