@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +30,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    public void fieldReset(){
+        totalCashNum = 0;
+        totalComputerNum = 0;
+        forgottenReceipt = 0;
+        cashTipNum = 0;
+        totalCashEarning = 0;
+        totalComputerEarning = 0;
     }
 
     /*@Override
@@ -203,7 +211,21 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case R.id.clear :{
-               this.clearConfirmation();
+                if(todayEntry.isEmpty()) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                    alertDialog.setTitle("Alert");
+                    alertDialog.setMessage("Entry is already empty");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+                else {
+                    this.clearConfirmation();
+                }
                 break;
             }
             case R.id.exit:{
@@ -221,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         todayEntry.clear();
+                        fieldReset();
                         entryArrayAdapter.notifyDataSetChanged();
                         break;
 
@@ -290,6 +313,8 @@ public class MainActivity extends AppCompatActivity {
                   if(!entryArrayAdapter.getItem(position).getSummaryFlag() && entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
                       intent.putExtra("position", position);
+                      intent.putExtra("cashNum", totalCashNum);
+                      intent.putExtra("compNum", totalComputerNum);
                       intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, computerEditActivity.class);
                       startActivityForResult(intent, intentCode.PASS);
@@ -297,6 +322,8 @@ public class MainActivity extends AppCompatActivity {
                 else if(!entryArrayAdapter.getItem(position).getSummaryFlag() && !entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
                       intent.putExtra("position", position);
+                      intent.putExtra("cashNum", totalCashNum);
+                      intent.putExtra("compNum", totalComputerNum);
                       intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, cashEditActivity.class);
                      startActivityForResult(intent, intentCode.PASS);

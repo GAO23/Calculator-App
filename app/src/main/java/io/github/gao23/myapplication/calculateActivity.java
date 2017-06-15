@@ -70,6 +70,8 @@ public class calculateActivity extends AppCompatActivity {
         }
         zero = this.checkIfZeroNeeded(totalEarning);
         result += "\nToday's total earning is $" + df.format(totalEarning) + zero;
+        //zero = this.checkIfZeroNeeded(totalEarning/todayEntery.size()-2);
+        //result += "\nTip per delivery is $" + df.format(totalEarning/(getIntent().getExtras("cashNum", 0)+getIntent().getExtras("compNum", 0))) + zero;
         if(todayEntery.isEmpty()){
             text.setText("There is no entry");
         }

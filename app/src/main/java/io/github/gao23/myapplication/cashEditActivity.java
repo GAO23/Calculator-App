@@ -32,6 +32,7 @@ public class cashEditActivity extends AppCompatActivity {
         subEntry = (EditText) findViewById(R.id.cashEditText2);
         customerPayment = (EditText) findViewById(R.id.cashEditText3);
         forgottenTip = (CheckBox) findViewById(R.id.cashCheckBox);
+        forgottenTip.setText("Check this box if you did not bring back the receipt.");
         initialEntry = this.getIntent().getParcelableExtra(intentCode.parb);
         save = (Button) findViewById(R.id.cashSaveButton);
         delete = (Button) findViewById(R.id.cashDeleteButton);
