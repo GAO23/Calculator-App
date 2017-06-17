@@ -20,6 +20,7 @@ public class calculateActivity extends AppCompatActivity {
     private double totalCash = 0;
     private double cashTip = 0;
     private double totalOwed = 0;
+    private int total;
 
 
     @Override
@@ -30,6 +31,7 @@ public class calculateActivity extends AppCompatActivity {
         text = (TextView) findViewById(R.id.calculateResultText);
         ok = (Button) findViewById(R.id.buttonOK);
         todayEntery = this.getIntent().getParcelableArrayListExtra("list");
+        total = getIntent().getIntExtra("Total",1);
         for(Entry entry: todayEntery){
             if(!entry.getSummaryFlag()){
                if(entry.isPaid() && entry.isCashTip()){
@@ -70,8 +72,8 @@ public class calculateActivity extends AppCompatActivity {
         }
         zero = this.checkIfZeroNeeded(totalEarning);
         result += "\nToday's total earning is $" + df.format(totalEarning) + zero;
-        //zero = this.checkIfZeroNeeded(totalEarning/todayEntery.size()-2);
-        //result += "\nTip per delivery is $" + df.format(totalEarning/(getIntent().getExtras("cashNum", 0)+getIntent().getExtras("compNum", 0))) + zero;
+        zero = this.checkIfZeroNeeded(totalEarning/total);
+        result += "\nTip per delivery is $" + df.format(totalEarning/total) + zero;
         if(todayEntery.isEmpty()){
             text.setText("There is no entry");
         }

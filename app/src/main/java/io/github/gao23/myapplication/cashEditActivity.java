@@ -21,7 +21,6 @@ public class cashEditActivity extends AppCompatActivity {
     private CheckBox forgottenTip;
     private Entry initialEntry;
     private Button save;
-    private Button delete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,6 @@ public class cashEditActivity extends AppCompatActivity {
         forgottenTip.setText("Check this box if you did not bring back the receipt.");
         initialEntry = this.getIntent().getParcelableExtra(intentCode.parb);
         save = (Button) findViewById(R.id.cashSaveButton);
-        delete = (Button) findViewById(R.id.cashDeleteButton);
         this.initialSetUp();
         entry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
         subEntry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));

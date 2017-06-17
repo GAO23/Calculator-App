@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, calculateActivity.class);
                 intent.putParcelableArrayListExtra("list",todayEntry);
+                intent.putExtra("Total", totalCashNum + totalComputerNum);
                 startActivity(intent);
                 break;
             }
@@ -313,8 +314,6 @@ public class MainActivity extends AppCompatActivity {
                   if(!entryArrayAdapter.getItem(position).getSummaryFlag() && entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
                       intent.putExtra("position", position);
-                      intent.putExtra("cashNum", totalCashNum);
-                      intent.putExtra("compNum", totalComputerNum);
                       intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, computerEditActivity.class);
                       startActivityForResult(intent, intentCode.PASS);
@@ -322,8 +321,6 @@ public class MainActivity extends AppCompatActivity {
                 else if(!entryArrayAdapter.getItem(position).getSummaryFlag() && !entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
                       intent.putExtra("position", position);
-                      intent.putExtra("cashNum", totalCashNum);
-                      intent.putExtra("compNum", totalComputerNum);
                       intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, cashEditActivity.class);
                      startActivityForResult(intent, intentCode.PASS);

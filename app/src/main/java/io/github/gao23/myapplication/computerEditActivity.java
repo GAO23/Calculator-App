@@ -19,7 +19,6 @@ public class computerEditActivity extends AppCompatActivity {
     EditText subEntry;
     CheckBox cashTip;
     Button save;
-    Button delete;
     Entry initialEntry;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class computerEditActivity extends AppCompatActivity {
         subEntry.setHint("Enter new address");
         cashTip = (CheckBox) findViewById(R.id.computerCheckBox1);
         save = (Button) findViewById(R.id.computerSave);
-        delete = (Button) findViewById(R.id.computerDelete);
         initialSetUp();
         subEntry.addTextChangedListener(new editTextChangeListener(save, entry, subEntry));
         entry.addTextChangedListener(new editTextChangeListener(save, entry, subEntry));
