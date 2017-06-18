@@ -41,40 +41,6 @@ public class MainActivity extends AppCompatActivity {
         totalComputerEarning = 0;
     }
 
-    /*@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("totalCashNum", totalCashNum);
-        outState.putInt("totalComputerNum", totalComputerNum);
-        outState.putInt("forgottenReceipt", forgottenReceipt);
-        outState.putInt("cashTipNum", cashTipNum);
-        outState.putDouble("totalComputerEarning",totalComputerEarning);
-        outState.putDouble("totalCashEarning",totalCashEarning);
-        outState.putParcelableArrayList("todayEntry",todayEntry);
-        super.onSaveInstanceState(outState);
-    }*/
-
-/*
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState!=null) {
-            setContentView(R.layout.activity_main);
-            totalCashNum = savedInstanceState.getInt("totalCashNum", totalCashNum);
-            totalComputerNum = savedInstanceState.getInt("totalComputerNum", totalComputerNum);
-            forgottenReceipt = savedInstanceState.getInt("forgottenReceipt", forgottenReceipt);
-            cashTipNum = savedInstanceState.getInt("cashTipNum", cashTipNum);
-            totalComputerEarning = savedInstanceState.getDouble("totalComputerEarning", totalComputerEarning);
-            totalCashEarning =savedInstanceState.getDouble("totalCashEarning", totalCashEarning);
-            todayEntry = savedInstanceState.getParcelableArrayList("todayEntry");
-            list = (ListView) findViewById(R.id.listView) ;
-            entryArrayAdapter = new entryAdaptor(this,todayEntry);
-            list.setAdapter(entryArrayAdapter);
-            entryArrayAdapter.notifyDataSetChanged();
-            this.updateComputerSummary();
-            this.updateCashSummary();
-        }
-    }*/
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
