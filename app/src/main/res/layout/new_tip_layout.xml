@@ -14,7 +14,7 @@
         android:layout_alignParentStart="true"
         android:layout_gravity="center_vertical|center_horizontal"
         android:onClick="newUnpaidOrderClicked"
-        android:text="NEW CASH ORDER" />
+        android:text="NEW CASH TIP" />
 
     <Button
         android:id="@+id/newPaidOrder"
@@ -24,7 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:onClick="newPaidOrderClicked"
-        android:text="NEW COMPUTER ORDER" />
+        android:text="NEW COMPUTER TIP" />
 
     <Button
         android:id="@+id/Save"
