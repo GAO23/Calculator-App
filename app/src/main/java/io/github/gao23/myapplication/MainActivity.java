@@ -1,18 +1,20 @@
 package io.github.gao23.myapplication;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private double totalCashEarning = 0.0;
     private  ListView list;
     private ArrayList<Entry> todayEntry;
+    private ArrayList<Entry> savedEntry;
     private entryAdaptor entryArrayAdapter;
 
     @Override
@@ -41,18 +44,51 @@ public class MainActivity extends AppCompatActivity {
         totalComputerEarning = 0;
     }
 
+    private void savePerferences (){
+        SharedPreferences save = getSharedPreferences("entry_data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = save.edit();
+        editor.putInt("totalCashNum", totalCashNum);
+        editor.putInt("totalComputerNum", totalComputerNum);
+        editor.putInt("forgottenReceipt", forgottenReceipt);
+        editor.putInt("cashTipNum", cashTipNum);
+        editor.putLong("totalComputerEarning",Double.doubleToRawLongBits(totalComputerEarning));
+        editor.putLong("totalCashEarning",Double.doubleToRawLongBits(totalCashEarning));
+        ComplexPreferences comPer = ComplexPreferences.getComplexPreferences(this, "entry_prefs", 0);
+        savedEntry = new ArrayList<Entry>();
+        savedEntry.addAll(todayEntry);
+        comPer.putObject("entry_value", savedEntry);
+        comPer.commit();
+        editor.commit();
+    }
+
+    private void restorePerferences(){
+        SharedPreferences restore = getSharedPreferences("entry_data", Context.MODE_PRIVATE);
+        totalCashNum = restore.getInt("totalCashNum", 0);
+        totalComputerNum = restore.getInt("totalComputerNum", 0);
+        forgottenReceipt = restore.getInt("forgottenReceipt", 0);
+        cashTipNum = restore.getInt("cashTipNum", 0);
+        totalComputerEarning =  Double.longBitsToDouble(restore.getLong("totalComputerEarning", Double.doubleToRawLongBits(0)));
+        totalCashEarning =  Double.longBitsToDouble(restore.getLong("totalCashEarning", Double.doubleToRawLongBits(0)));
+        ComplexPreferences comPer = ComplexPreferences.getComplexPreferences(this, "entry_prefs", 0);
+        savedEntry = comPer.getObject("entry_value",ArrayList.class);
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            setContentView(R.layout.activity_main);
-            list = (ListView) findViewById(R.id.listView);
-            todayEntry = new ArrayList<Entry>();
-            entryArrayAdapter = new entryAdaptor(this, todayEntry);
-            list.setAdapter(entryArrayAdapter);
-            list.setOnItemClickListener(new itemListener());
-
+        setContentView(R.layout.activity_main);
+        list = (ListView) findViewById(R.id.listView);
+        todayEntry = new ArrayList<Entry>();
+        this.restorePerferences();
+        entryArrayAdapter = new entryAdaptor(this, todayEntry);
+        list.setAdapter(entryArrayAdapter);
+        list.setOnItemClickListener(new itemListener());
+        if(savedEntry!=null){
+            todayEntry.addAll(savedEntry);
+        }
     }
 
     public void onClick(View v){
@@ -73,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 totalComputerEarning += entry.getEntry();
                 this.updateComputerSummary();
+                this.savePerferences();
                 Toast.makeText(this.getApplicationContext(), "New computer entry saved", Toast.LENGTH_LONG).show();
             }
             else{
@@ -83,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 totalCashEarning += entry.getCustomerPayment()-entry.getEntry();
                 this.updateCashSummary();
+                this.savePerferences();
                 Toast.makeText(this.getApplicationContext(), "New cash entry saved", Toast.LENGTH_LONG).show();
+                this.savePerferences();
             }
             entryArrayAdapter.notifyDataSetChanged();
         }
@@ -99,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             this.updateComputerSummary();
             this.entryArrayAdapter.notifyDataSetChanged();
             Toast.makeText(this.getApplicationContext(), "Entry Modified", Toast.LENGTH_LONG).show();
+            this.savePerferences();
         }
 
        else if(resultCode == intentCode.COMPUTERDELETE){
@@ -117,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             }
             entryArrayAdapter.notifyDataSetChanged();
             Toast.makeText(this.getApplicationContext(), "Successfully Removed", Toast.LENGTH_LONG).show();
+            this.savePerferences();
         }
 
         else if(resultCode == intentCode.CASHCHECK){
@@ -130,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
             this.updateCashSummary();
             this.entryArrayAdapter.notifyDataSetChanged();
             Toast.makeText(this.getApplicationContext(), "Entry Modified", Toast.LENGTH_LONG).show();
+            this.savePerferences();
         }
 
         else if(resultCode == intentCode.CASHDELETE){
@@ -148,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             }
             entryArrayAdapter.notifyDataSetChanged();
             Toast.makeText(this.getApplicationContext(), "Successfully Removed", Toast.LENGTH_LONG).show();
+            this.savePerferences();
         }
 
 
@@ -212,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                         todayEntry.clear();
                         fieldReset();
                         entryArrayAdapter.notifyDataSetChanged();
+                        savePerferences();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
