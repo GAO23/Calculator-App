@@ -32,6 +32,7 @@ public class calculateActivity extends AppCompatActivity {
         ok = (Button) findViewById(R.id.buttonOK);
         todayEntery = this.getIntent().getParcelableArrayListExtra("list");
         total = getIntent().getIntExtra("Total",1);
+        this.getSupportActionBar().setTitle("Tip Calculations");
         for(Entry entry: todayEntery){
             if(!entry.getSummaryFlag()){
                if(entry.isPaid() && entry.isCashTip()){
@@ -51,8 +52,6 @@ public class calculateActivity extends AppCompatActivity {
                    totalOwed += entry.getEntry();
                }
             }
-            this.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         }
         DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";
@@ -82,6 +81,7 @@ public class calculateActivity extends AppCompatActivity {
         else{
             text.setText(result);
         }
+
     }
 
 

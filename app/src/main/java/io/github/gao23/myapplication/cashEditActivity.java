@@ -38,8 +38,7 @@ public class cashEditActivity extends AppCompatActivity {
         entry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
         subEntry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
         customerPayment.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
-        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
-        this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        this.getSupportActionBar().setTitle("Edit Cash Tip");
     }
 
     @Override
