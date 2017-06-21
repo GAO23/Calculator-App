@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         if(savedEntry!=null){
             todayEntry.addAll(savedEntry);
         }
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
     }
 
     public void onClick(View v){

@@ -51,6 +51,8 @@ public class calculateActivity extends AppCompatActivity {
                    totalOwed += entry.getEntry();
                }
             }
+            this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+            this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         }
         DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";

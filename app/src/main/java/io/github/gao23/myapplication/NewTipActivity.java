@@ -52,6 +52,8 @@ public class NewTipActivity extends AppCompatActivity {
         lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp2.addRule(RelativeLayout.BELOW, subEntry.getId());
         lp3 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
     }
 
     public void newUnpaidOrderClicked(View v) {

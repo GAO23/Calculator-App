@@ -35,6 +35,8 @@ public class computerEditActivity extends AppCompatActivity {
         initialSetUp();
         subEntry.addTextChangedListener(new editTextChangeListener(save, entry, subEntry));
         entry.addTextChangedListener(new editTextChangeListener(save, entry, subEntry));
+        this.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
     }
 
     private void initialSetUp(){
