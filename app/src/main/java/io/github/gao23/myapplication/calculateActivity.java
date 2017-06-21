@@ -61,7 +61,7 @@ public class calculateActivity extends AppCompatActivity {
         zero = this.checkIfZeroNeeded(cashTip);
         result+="\nToday's total computer cash tip earning amount is $" + df.format(cashTip) + zero+"\n";
         zero = this.checkIfZeroNeeded(totalCash);
-        result+="\nToday's total cash earning is $ " + df.format(totalCash) + zero;
+        result+="\nToday's total cash earning is $" + df.format(totalCash) + zero;
         zero = this.checkIfZeroNeeded(totalOwed);
         result +="\nToday's total customer charged amount is $" + df.format(totalOwed) + zero+"\n";
         zero = this.checkIfZeroNeeded(totalOwed-(totalComputer-cashTip));
