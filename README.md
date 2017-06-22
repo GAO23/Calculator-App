@@ -5,5 +5,5 @@ I couldn't find any apps on the playstore to help me in record keeping. Solution
 
 
 Feel free to complile my code and run the app. I would be EXTREAMLY flatter and grateful if you find this app to be actually useful :)
-You are also free to pull my source code and modified it or copy and paste it in any way you wish. All I aks for in return is that you 
+You are also free to pull my source code and modified it or copy and paste it in any way you wish. All I ask for in return is that you 
 mention my name in your credit section. Have Fun!!!
