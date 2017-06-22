@@ -40,10 +40,10 @@ public class NewTipActivity extends AppCompatActivity {
         this.saveButton.setEnabled(false);
         view = (RelativeLayout) findViewById(R.id.RelativeLayout01);
         entry = new EditText(this);
-        entry.setId(1);
+        entry.setId(Integer.valueOf(1));
         entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
         subEntry = new EditText(this);
-        subEntry.setId(2);
+        subEntry.setId(Integer.valueOf(2));
         subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
         entry.addTextChangedListener(new TextChangeListener(saveButton, entry, subEntry, customerPayment, this));
         subEntry.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
@@ -73,7 +73,7 @@ public class NewTipActivity extends AppCompatActivity {
             customerPayment = new EditText(this);
             customerPayment.setHint("Enter customer payment amount");
             customerPayment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
-            customerPayment.setId(3);
+            customerPayment.setId(Integer.valueOf(3));
             view.addView(customerPayment, lp2);
             receiptBack = new CheckBox(this);
             receiptBack.setText("Check this box if you did not bring back the receipt.");
