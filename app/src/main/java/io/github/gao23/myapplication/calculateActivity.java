@@ -89,7 +89,8 @@ public class calculateActivity extends AppCompatActivity {
 
 
     public String checkIfZeroNeeded(double test){
-        String num =  Double.toString(test);
+        DecimalFormat df = new DecimalFormat("#.##");
+        String num =  df.format(test);
         int i = num.lastIndexOf('.');
         if(test % 1 == 0){
             return ".00";
