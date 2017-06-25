@@ -6,6 +6,9 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -45,13 +48,13 @@ public class NewTipActivity extends AppCompatActivity {
         subEntry = new EditText(this);
         subEntry.setId(Integer.valueOf(2));
         subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-        entry.addTextChangedListener(new TextChangeListener(saveButton, entry, subEntry, customerPayment, this));
-        subEntry.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
         lp1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp1.addRule(RelativeLayout.BELOW, entry.getId());
         lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp2.addRule(RelativeLayout.BELOW, subEntry.getId());
         lp3 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        entry.addTextChangedListener(new TextChangedListnerer());
+        subEntry.addTextChangedListener(new TextChangedListnerer());
         this.getSupportActionBar().setTitle("New Tip");
     }
 
@@ -71,20 +74,22 @@ public class NewTipActivity extends AppCompatActivity {
         }
         if (customerPayment == null) {
             customerPayment = new EditText(this);
+            customerPayment.setText("");
             customerPayment.setHint("Enter customer payment amount");
-            customerPayment.addTextChangedListener(new TextChangeListener(this.saveButton, entry, subEntry, customerPayment, this));
             customerPayment.setId(Integer.valueOf(3));
             view.addView(customerPayment, lp2);
             receiptBack = new CheckBox(this);
             receiptBack.setText("Check this box if you did not bring back the receipt.");
             lp3.addRule(RelativeLayout.BELOW, customerPayment.getId());
             view.addView(receiptBack, lp3);
+            customerPayment.addTextChangedListener(new TextChangedListnerer());
         }
         if (customerPayment != null) {
             customerPayment.setText("");
             customerPayment.setHint("Enter customer payment amount");
             receiptBack.setChecked(false);
         }
+        Log.d("debug234",Boolean.toString(customerPayment==null));
     }
 
     public void newPaidOrderClicked(View v) {
@@ -114,14 +119,10 @@ public class NewTipActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isCashTipNull() {
-        return cashTip == null;
-    }
-
     public void SaveClicked(View v) {
         Entry result;
         try {
-            if (isCashTipNull()) {
+            if (cashTip==null) {
                 double chargedAmount;
                 int orderNum;
                 double payment;
@@ -235,5 +236,37 @@ public class NewTipActivity extends AppCompatActivity {
           this.finish();
       }
 
+    private class TextChangedListnerer implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                   return;
+        }
 
-}
+        @Override
+        public void afterTextChanged(Editable s) {
+            return;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (customerPayment == null) {
+                if (entry.getText().length() == 0 || subEntry.getText().length() == 0) {
+                    saveButton.setEnabled(false);
+                } else {
+                    saveButton.setEnabled(true);
+                }
+            } else {
+                if (entry.getText().length() == 0 || subEntry.getText().length() == 0 || customerPayment.getText().length() == 0) {
+                    saveButton.setEnabled(false);
+                } else {
+                    saveButton.setEnabled(true);
+                }
+            }
+
+        }
+    }
+
+ }
+
+
+
