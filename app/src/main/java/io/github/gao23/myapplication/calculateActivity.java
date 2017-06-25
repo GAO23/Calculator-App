@@ -59,17 +59,19 @@ public class calculateActivity extends AppCompatActivity {
         zero = this.checkIfZeroNeeded(totalComputer);
         result += "Today's total computer earning is $" + df.format(totalComputer) + zero + "\nToday's total computer cash tip is " + cashTipNum;
         zero = this.checkIfZeroNeeded(cashTip);
-        result+="\nToday's total computer cash tip earning amount is $" + df.format(cashTip) + zero+"\n";
+        result+="\nToday's total computer cash tip earning amount is $" + df.format(cashTip) + zero;
+        zero = this.checkIfZeroNeeded(totalComputer-cashTip);
+        result+="\nStore owed you $" + df.format(totalComputer-cashTip) + zero + " in computer tips"+"\n";
         zero = this.checkIfZeroNeeded(totalCash);
         result+="\nToday's total cash earning is $" + df.format(totalCash) + zero;
         zero = this.checkIfZeroNeeded(totalOwed);
-        result +="\nToday's total customer charged amount is $" + df.format(totalOwed) + zero +"\n";
+        result +="\nYou owed the store $" + df.format(totalOwed) + zero +" in cash order sales\n";
         zero = this.checkIfZeroNeeded(totalOwed-(totalComputer-cashTip));
         if(totalOwed-(totalComputer-cashTip)<0){
-            result += "\nStore owes you $" + df.format((totalOwed - (totalComputer - cashTip))*-1)+ zero+"\n";
+            result += "\n Store owed you more computer tips than you owed the stores in sales. Store owed you $" + df.format((totalOwed - (totalComputer - cashTip))*-1)+ zero+"\n";
         }
         else {
-            result += "\nTotal owed to the store is customer charged amount - (computer earnings - total computer cash tip earnings) = $" + df.format((totalOwed - (totalComputer - cashTip))) + zero + "\n";
+            result += "\nTotal owed to the store is amount you owed to the store - amount of  computer tips store owed you = $" + df.format((totalOwed - (totalComputer - cashTip))) + zero + "\n";
         }
         zero = this.checkIfZeroNeeded(totalEarning);
         result += "\nToday's total earning is $" + df.format(totalEarning) + zero;
