@@ -68,10 +68,10 @@ public class calculateActivity extends AppCompatActivity {
         result +="\nYou owed the store $" + df.format(totalOwed) + zero +" in cash order sales\n";
         zero = this.checkIfZeroNeeded(totalOwed-(totalComputer-cashTip));
         if(totalOwed-(totalComputer-cashTip)<0){
-            result += "\n Store owed you more computer tips than you owed the stores in sales. Store owed you $" + df.format((totalOwed - (totalComputer - cashTip))*-1)+ zero+"\n";
+            result += "\nStore owed you $" +df.format((totalOwed - (totalComputer - cashTip))*-1)+ zero+"\n";
         }
         else {
-            result += "\nTotal owed to the store is amount you owed to the store - amount of  computer tips store owed you = $" + df.format((totalOwed - (totalComputer - cashTip))) + zero + "\n";
+            result += "\nTotal owed to the store is amount you owed to the store minus amount of computer tips store owed you = $" + df.format((totalOwed - (totalComputer - cashTip))) + zero + "\n";
         }
         zero = this.checkIfZeroNeeded(totalEarning);
         result += "\nToday's total earning is $" + df.format(totalEarning) + zero;
