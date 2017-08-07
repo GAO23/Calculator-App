@@ -5,5 +5,7 @@ I couldn't find any apps on the playstore to help me in record keeping. Solution
 
 
 Feel free to download the apk file and use it to install the app and run it. I would be EXTREAMLY flatter and grateful if you find this app to be actually useful :)
+To download and install, just download and install the apk file in my master directory. Be sure to allow unknown sources on your android phone first. 
+
 You are also free to pull my source code and modified it or copy and paste it in any way you wish. All I ask for in return is that you 
 mention my name in your credit section. Have Fun!!!
