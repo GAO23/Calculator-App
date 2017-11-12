@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Delivery Tip Calculator</string>
+    <string name="about_text">Cash tip is delivery in which the food is unpaid and customer will pay you in cash when you deliver. Computer tip is delivery in which customer has already paid for the food.
+    Fields for cash tip is pretty much self explanatory. For computer tip, if the customer pays for the food already but wish to tip you in cash, check cash tip.
+    After the day closes, tap on calculate to see amount of money you owed to the store in cash. This is calculated by subtracting your tips from store's sales in food that are paid in cash</string>
 </resources>

@@ -19,7 +19,8 @@
         <activity android:name=".NewTipActivity" />
         <activity android:name=".computerEditActivity" />
         <activity android:name=".cashEditActivity" />
-        <activity android:name=".calculateActivity"></activity>
+        <activity android:name=".calculateActivity" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>
