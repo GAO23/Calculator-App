@@ -244,6 +244,10 @@ public class MainActivity extends AppCompatActivity {
                  onBackPressed();
                 break;
             }
+            case R.id.about:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                break;
         }
         return true;
     }
