@@ -5,5 +5,8 @@ It calculates the earning per tip.
 It will quickly notify you if you lost some cash due to wrong change, boss/coworker cheating you, and whatnot.
 This app is made for fast food delivery driver to help them track of their deliveries and earnings.
 
+App is live on playstore 
+https://play.google.com/store/apps/details?id=io.github.gao23.myapplication
+
 
 
