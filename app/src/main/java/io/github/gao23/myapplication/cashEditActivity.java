@@ -32,7 +32,7 @@ public class cashEditActivity extends AppCompatActivity {
         customerPayment = (EditText) findViewById(R.id.cashEditText3);
         forgottenTip = (CheckBox) findViewById(R.id.cashCheckBox);
         forgottenTip.setText("Check this box if you did not bring back the receipt.");
-        initialEntry = this.getIntent().getParcelableExtra(intentCode.parb);
+        initialEntry = this.getIntent().getParcelableExtra(intentCode.ENTRY_PARCEL);
         save = (Button) findViewById(R.id.cashSaveButton);
         this.initialSetUp();
         entry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
@@ -43,7 +43,7 @@ public class cashEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.setResult(intentCode.INVALID);
+        this.setResult(intentCode.INVALID_RESULT_INTENT_CODE);
         finish();
     }
 
@@ -63,8 +63,7 @@ public class cashEditActivity extends AppCompatActivity {
 
     public void saveTermination(Entry result){
         Intent intent = new Intent();
-        intent.putExtra(intentCode.parb, initialEntry);
-        intent.putExtra(intentCode.parb2, result);
+        intent.putExtra(intentCode.EDITED_ENTRY_PARCEL, result);
         int position = this.getIntent().getIntExtra("position",0);
         intent.putExtra("position", position);
         double cashTipDifferences = (result.getCustomerPayment()-result.getEntry()) - (initialEntry.getCustomerPayment()-initialEntry.getEntry());
@@ -77,7 +76,7 @@ public class cashEditActivity extends AppCompatActivity {
         }
         intent.putExtra(intentCode.cashTipDifferences, cashTipDifferences);
         intent.putExtra(intentCode.forgottenDifferences, cashForgottenDifferences);
-        this.setResult(intentCode.CASHCHECK, intent);
+        this.setResult(intentCode.CASH_EDIT_RESULT_INTENT_CODE, intent);
         this.finish();
     }
 
@@ -153,7 +152,7 @@ public class cashEditActivity extends AppCompatActivity {
         Intent intent = new Intent();
         int position = this.getIntent().getIntExtra("position",0);
         intent.putExtra("position", position);
-        this.setResult(intentCode.CASHDELETE, intent);
+        this.setResult(intentCode.CASH_DELETE_RESULT_INTENT_CODE, intent);
         finish();
     }
 

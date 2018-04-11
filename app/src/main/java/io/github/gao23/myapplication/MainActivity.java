@@ -96,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v){
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, NewTipActivity.class);
-        startActivityForResult(intent, intentCode.PASS);
+        startActivityForResult(intent, intentCode.GENERAL_NEW_ACTIVITY_INTENT_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == intentCode.CHECK) {
-            Entry entry = data.getParcelableExtra(intentCode.parb);
+        if(resultCode == intentCode.VALID_RESULT_INTENT_CODE) {
+            Entry entry = data.getParcelableExtra(intentCode.ENTRY_PARCEL);
             if(entry.isPaid()){
                 this.addComputerTip(entry);
                 totalComputerNum +=1;
@@ -129,21 +129,21 @@ public class MainActivity extends AppCompatActivity {
             entryArrayAdapter.notifyDataSetChanged();
         }
 
-        else if(resultCode==intentCode.COMPUTERCHECK){
+        else if(resultCode==intentCode.COMPUTER_EDIT_RESULT_INTENT_CODE){
             double tipDifferences = data.getDoubleExtra(intentCode.compTipDifferences,0.0);
             int isCashDifferences = data.getIntExtra(intentCode.isCashTipDifferences,0);
             totalComputerEarning += tipDifferences;
             cashTipNum += isCashDifferences;
             int position = data.getIntExtra("position",0);
             this.todayEntry.remove(position);
-            this.todayEntry.add(position, (Entry) data.getParcelableExtra(intentCode.parb2));
+            this.todayEntry.add(position, (Entry) data.getParcelableExtra(intentCode.EDITED_ENTRY_PARCEL));
             this.updateComputerSummary();
             this.entryArrayAdapter.notifyDataSetChanged();
             Toast.makeText(this.getApplicationContext(), "Entry Modified", Toast.LENGTH_LONG).show();
             this.savePerferences();
         }
 
-       else if(resultCode == intentCode.COMPUTERDELETE){
+       else if(resultCode == intentCode.COMPUTER_DELETE_RESULT_INTENT_CODE){
             int position = data.getIntExtra("position",0);
             totalComputerEarning -= this.todayEntry.get(position).getEntry();
             totalComputerNum -=1;
@@ -162,21 +162,21 @@ public class MainActivity extends AppCompatActivity {
             this.savePerferences();
         }
 
-        else if(resultCode == intentCode.CASHCHECK){
+        else if(resultCode == intentCode.CASH_EDIT_RESULT_INTENT_CODE){
             double tipDifferences = data.getDoubleExtra(intentCode.cashTipDifferences,0.0);
             int forgottenDifferences = data.getIntExtra(intentCode.forgottenDifferences,0);
             totalCashEarning += tipDifferences;
             forgottenReceipt += forgottenDifferences;
             int position = data.getIntExtra("position",0);
             this.todayEntry.remove(position);
-            this.addCashTip((Entry)data.getParcelableExtra(intentCode.parb2));
+            this.addCashTip((Entry)data.getParcelableExtra(intentCode.EDITED_ENTRY_PARCEL));
             this.updateCashSummary();
             this.entryArrayAdapter.notifyDataSetChanged();
             Toast.makeText(this.getApplicationContext(), "Entry Modified", Toast.LENGTH_LONG).show();
             this.savePerferences();
         }
 
-        else if(resultCode == intentCode.CASHDELETE){
+        else if(resultCode == intentCode.CASH_DELETE_RESULT_INTENT_CODE){
             int position = data.getIntExtra("position",0);
             totalCashEarning -= (this.todayEntry.get(position).getCustomerPayment() - this.todayEntry.get(position).getEntry());
             totalCashNum -=1;
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        else if(resultCode==intentCode.INVALID){
+        else if(resultCode==intentCode.INVALID_RESULT_INTENT_CODE){
             Toast.makeText(this.getApplicationContext(), "Action Canceled", Toast.LENGTH_LONG).show();
             return;
         }
@@ -330,16 +330,16 @@ public class MainActivity extends AppCompatActivity {
                   if(!entryArrayAdapter.getItem(position).getSummaryFlag() && entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
                       intent.putExtra("position", position);
-                      intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
+                      intent.putExtra(intentCode.ENTRY_PARCEL, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, computerEditActivity.class);
-                      startActivityForResult(intent, intentCode.PASS);
+                      startActivityForResult(intent, intentCode.GENERAL_NEW_ACTIVITY_INTENT_CODE);
                   }
                 else if(!entryArrayAdapter.getItem(position).getSummaryFlag() && !entryArrayAdapter.getItem(position).isPaid()){
                       Intent intent = new Intent();
                       intent.putExtra("position", position);
-                      intent.putExtra(intentCode.parb, entryArrayAdapter.getItem(position));
+                      intent.putExtra(intentCode.ENTRY_PARCEL, entryArrayAdapter.getItem(position));
                       intent.setClass(MainActivity.this, cashEditActivity.class);
-                     startActivityForResult(intent, intentCode.PASS);
+                     startActivityForResult(intent, intentCode.GENERAL_NEW_ACTIVITY_INTENT_CODE);
                 }
                 else if(!entryArrayAdapter.getItem(position).getSummaryFlag()){
                       return;

@@ -25,7 +25,7 @@ public class computerEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_computer_edit);
-        initialEntry = this.getIntent().getParcelableExtra(intentCode.parb);
+        initialEntry = this.getIntent().getParcelableExtra(intentCode.ENTRY_PARCEL);
         entry = (EditText) findViewById(R.id.computerEditText1);
         entry.setHint("Enter new tip amount");
         subEntry = (EditText) findViewById(R.id.computerEditTExt2);
@@ -64,7 +64,7 @@ public class computerEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.setResult(intentCode.INVALID);
+        this.setResult(intentCode.INVALID_RESULT_INTENT_CODE);
         finish();
     }
 
@@ -127,8 +127,7 @@ public class computerEditActivity extends AppCompatActivity {
 
     private void terminate(Entry result){
         Intent intent = new Intent();
-        intent.putExtra(intentCode.parb, initialEntry);
-        intent.putExtra(intentCode.parb2, result);
+        intent.putExtra(intentCode.EDITED_ENTRY_PARCEL, result);
         int position = this.getIntent().getIntExtra("position",0)
 ;        intent.putExtra("position", position);
         double compTipDifferences = result.getEntry()-initialEntry.getEntry();
@@ -141,7 +140,7 @@ public class computerEditActivity extends AppCompatActivity {
         }
         intent.putExtra(intentCode.compTipDifferences, compTipDifferences);
         intent.putExtra(intentCode.isCashTipDifferences, compCashTipDifferences);
-        this.setResult(intentCode.COMPUTERCHECK, intent);
+        this.setResult(intentCode.COMPUTER_EDIT_RESULT_INTENT_CODE, intent);
         this.finish();
     }
 
@@ -184,7 +183,7 @@ public class computerEditActivity extends AppCompatActivity {
         Intent intent = new Intent();
         int position = this.getIntent().getIntExtra("position",0);
         intent.putExtra("position", position);
-        this.setResult(intentCode.COMPUTERDELETE, intent);
+        this.setResult(intentCode.COMPUTER_DELETE_RESULT_INTENT_CODE, intent);
         finish();
     }
 

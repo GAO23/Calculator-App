@@ -53,8 +53,8 @@ public class NewTipActivity extends AppCompatActivity {
         lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp2.addRule(RelativeLayout.BELOW, subEntry.getId());
         lp3 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        entry.addTextChangedListener(new TextChangedListnerer());
-        subEntry.addTextChangedListener(new TextChangedListnerer());
+        entry.addTextChangedListener(new TextChangedListenrer());
+        subEntry.addTextChangedListener(new TextChangedListenrer());
         this.getSupportActionBar().setTitle("New Tip");
     }
 
@@ -82,7 +82,7 @@ public class NewTipActivity extends AppCompatActivity {
             receiptBack.setText("Check this box if you did not bring back the receipt.");
             lp3.addRule(RelativeLayout.BELOW, customerPayment.getId());
             view.addView(receiptBack, lp3);
-            customerPayment.addTextChangedListener(new TextChangedListnerer());
+            customerPayment.addTextChangedListener(new TextChangedListenrer());
         }
         if (customerPayment != null) {
             customerPayment.setText("");
@@ -225,18 +225,18 @@ public class NewTipActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        this.setResult(intentCode.INVALID);
+        this.setResult(intentCode.INVALID_RESULT_INTENT_CODE);
         finish();
     }
 
     private void terminate(Entry result){
           Intent intent = new Intent();
-          intent.putExtra(intentCode.parb, result);
-          this.setResult(intentCode.CHECK, intent);
+          intent.putExtra(intentCode.ENTRY_PARCEL, result);
+          this.setResult(intentCode.VALID_RESULT_INTENT_CODE, intent);
           this.finish();
       }
 
-    private class TextChangedListnerer implements TextWatcher {
+    private class TextChangedListenrer implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                    return;
