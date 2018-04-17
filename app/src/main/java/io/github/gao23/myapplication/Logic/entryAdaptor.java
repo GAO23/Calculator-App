@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.Logic;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import io.github.gao23.myapplication.R;
 
 /**
  * Created by GAO on 6/4/2017.

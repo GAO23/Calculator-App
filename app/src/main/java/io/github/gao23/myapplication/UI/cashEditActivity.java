@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.UI;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +13,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+
+import io.github.gao23.myapplication.Logic.Entry;
+import io.github.gao23.myapplication.Logic.InvalidInputException;
+import io.github.gao23.myapplication.Logic.editTextChangeListener;
+import io.github.gao23.myapplication.Logic.intentCode;
+import io.github.gao23.myapplication.R;
 
 public class cashEditActivity extends AppCompatActivity {
     private EditText entry;

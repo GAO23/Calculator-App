@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.UI;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import io.github.gao23.myapplication.Logic.Entry;
+import io.github.gao23.myapplication.R;
 
 public class calculateActivity extends AppCompatActivity {
     private TextView text;

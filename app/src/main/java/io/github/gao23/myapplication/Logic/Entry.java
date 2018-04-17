@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.Logic;
 
 import android.os.Parcel;
 import android.os.Parcelable;

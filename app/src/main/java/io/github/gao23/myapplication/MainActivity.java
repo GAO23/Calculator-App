@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,18 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import io.github.gao23.myapplication.Logic.ComplexPreferences;
+import io.github.gao23.myapplication.Logic.Entry;
+import io.github.gao23.myapplication.Logic.entryAdaptor;
+import io.github.gao23.myapplication.Logic.intentCode;
+import io.github.gao23.myapplication.UI.AboutActivity;
+import io.github.gao23.myapplication.UI.NewTipActivity;
+import io.github.gao23.myapplication.UI.calculateActivity;
+import io.github.gao23.myapplication.UI.cashEditActivity;
+import io.github.gao23.myapplication.UI.computerEditActivity;
+
 public class MainActivity extends AppCompatActivity {
+
     private int totalCashNum = 0;
     private int totalComputerNum = 0;
     private int forgottenReceipt = 0;
@@ -30,50 +40,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Entry> savedEntry;
     private entryAdaptor entryArrayAdapter;
 
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
-
-    public void fieldReset(){
-        totalCashNum = 0;
-        totalComputerNum = 0;
-        forgottenReceipt = 0;
-        cashTipNum = 0;
-        totalCashEarning = 0;
-        totalComputerEarning = 0;
-    }
-
-    private void savePerferences (){
-        SharedPreferences save = getSharedPreferences("entry_data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = save.edit();
-        editor.putInt("totalCashNum", totalCashNum);
-        editor.putInt("totalComputerNum", totalComputerNum);
-        editor.putInt("forgottenReceipt", forgottenReceipt);
-        editor.putInt("cashTipNum", cashTipNum);
-        editor.putLong("totalComputerEarning",Double.doubleToRawLongBits(totalComputerEarning));
-        editor.putLong("totalCashEarning",Double.doubleToRawLongBits(totalCashEarning));
-        ComplexPreferences comPer = ComplexPreferences.getComplexPreferences(this, "entry_prefs", 0);
-        savedEntry = new ArrayList<Entry>();
-        savedEntry.addAll(todayEntry);
-        comPer.putObject("entry_value", savedEntry);
-        comPer.commit();
-        editor.commit();
-    }
-
-    private void restorePerferences(){
-        SharedPreferences restore = getSharedPreferences("entry_data", Context.MODE_PRIVATE);
-        totalCashNum = restore.getInt("totalCashNum", 0);
-        totalComputerNum = restore.getInt("totalComputerNum", 0);
-        forgottenReceipt = restore.getInt("forgottenReceipt", 0);
-        cashTipNum = restore.getInt("cashTipNum", 0);
-        totalComputerEarning =  Double.longBitsToDouble(restore.getLong("totalComputerEarning", Double.doubleToRawLongBits(0)));
-        totalCashEarning =  Double.longBitsToDouble(restore.getLong("totalCashEarning", Double.doubleToRawLongBits(0)));
-        ComplexPreferences comPer = ComplexPreferences.getComplexPreferences(this, "entry_prefs", 0);
-        savedEntry = comPer.getObject("entry_value",ArrayList.class);
-    }
-
-
+    /***
+     * This is instantiation
+     *
+     * @param savedInstanceState is the default
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +64,80 @@ public class MainActivity extends AppCompatActivity {
         this.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
     }
 
+
+    /***
+     * This is the default
+     */
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+
+    /***
+     *  this resets everything
+     */
+    public void fieldReset(){
+        totalCashNum = 0;
+        totalComputerNum = 0;
+        forgottenReceipt = 0;
+        cashTipNum = 0;
+        totalCashEarning = 0;
+        totalComputerEarning = 0;
+    }
+
+    /***
+     *  saving the data
+     */
+    private void savePerferences (){
+        SharedPreferences save = getSharedPreferences("entry_data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = save.edit();
+        editor.putInt("totalCashNum", totalCashNum);
+        editor.putInt("totalComputerNum", totalComputerNum);
+        editor.putInt("forgottenReceipt", forgottenReceipt);
+        editor.putInt("cashTipNum", cashTipNum);
+        editor.putLong("totalComputerEarning",Double.doubleToRawLongBits(totalComputerEarning));
+        editor.putLong("totalCashEarning",Double.doubleToRawLongBits(totalCashEarning));
+        ComplexPreferences comPer = ComplexPreferences.getComplexPreferences(this, "entry_prefs", 0);
+        savedEntry = new ArrayList<Entry>();
+        savedEntry.addAll(todayEntry);
+        comPer.putObject("entry_value", savedEntry);
+        comPer.commit();
+        editor.commit();
+    }
+
+    /***
+     * restoring the data from previous session
+     */
+    private void restorePerferences(){
+        SharedPreferences restore = getSharedPreferences("entry_data", Context.MODE_PRIVATE);
+        totalCashNum = restore.getInt("totalCashNum", 0);
+        totalComputerNum = restore.getInt("totalComputerNum", 0);
+        forgottenReceipt = restore.getInt("forgottenReceipt", 0);
+        cashTipNum = restore.getInt("cashTipNum", 0);
+        totalComputerEarning =  Double.longBitsToDouble(restore.getLong("totalComputerEarning", Double.doubleToRawLongBits(0)));
+        totalCashEarning =  Double.longBitsToDouble(restore.getLong("totalCashEarning", Double.doubleToRawLongBits(0)));
+        ComplexPreferences comPer = ComplexPreferences.getComplexPreferences(this, "entry_prefs", 0);
+        savedEntry = comPer.getObject("entry_value",ArrayList.class);
+    }
+
+
+    /***
+     *  what happens when that circular pink plus is tapped
+     * @param v is the default
+     */
     public void onClick(View v){
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, NewTipActivity.class);
         startActivityForResult(intent, intentCode.GENERAL_NEW_ACTIVITY_INTENT_CODE);
     }
 
+    /***
+     * what happens when launched activities finishes
+     * @param requestCode is the requested intent code past by new activity intent
+     * @param resultCode is the resulted intent code past by the finished activity
+     * @param data is used to accessed whatever items passed in by the finished intent code
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == intentCode.VALID_RESULT_INTENT_CODE) {
@@ -202,7 +241,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /***
+     * this is for creating and adding the drop down menu in the main activity
+     * The menu template xml can be found in the menu folder
+     * @param menu is the default
+     * @return is the default value
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.action_menu, menu);
@@ -210,7 +254,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /***
+     *
+     * @param item is whatever menu item that is tapped, the tapped menu items can be seen in the menu xml file
+     * @return is the default value
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -252,6 +300,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /***
+     * This is support function for the clear menu item. It asks the user to confirm deleting all entries
+     * if confirmed, it calls on the supporting function and write the preferences so changed are saved to disk
+     */
     private void clearConfirmation() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -276,7 +328,10 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
-
+    /***
+     *  this is for adding the computer entry to its specific index
+     * @param entry is the entry being added
+     */
     public void addComputerTip(Entry entry){
         if(totalComputerNum == 0){
             this.todayEntry.add(0,new Entry(""));
@@ -284,6 +339,10 @@ public class MainActivity extends AppCompatActivity {
         todayEntry.add(1, entry);
     }
 
+    /***
+     * this is for adding the cash entry to uts proper index
+     * @param entry is the entry being added
+     */
     public void addCashTip(Entry entry) {
         if (totalCashNum == 0) {
             this.todayEntry.add(new Entry(""));
@@ -302,6 +361,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /***
+     * this updates the summary label above the all the computer entries, used when new entry is added
+     */
     public void updateComputerSummary(){
         String zero = "";
         zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalComputerEarning)));
@@ -309,6 +371,9 @@ public class MainActivity extends AppCompatActivity {
         entryArrayAdapter.getItem(0).setSummaryMessage("Total Computer Orders: " + Integer.toString(totalComputerNum)  + "\nCash Tip: " + Integer.toString(cashTipNum) + "\nTotal Computer Earnings: $" + result);
     }
 
+    /***
+     * this updates the cash summary, used when new entry is being added
+     */
     public void updateCashSummary(){
         if(totalComputerNum == 0){
             String zero = "";
@@ -324,7 +389,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-        private  class itemListener implements AdapterView.OnItemClickListener{
+    /***
+     * this is what happens when the entries in teh main activity is tapped on, it launches the proper activity to edit ttheentries
+     */
+    private  class itemListener implements AdapterView.OnItemClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                   if(!entryArrayAdapter.getItem(position).getSummaryFlag() && entryArrayAdapter.getItem(position).isPaid()){

@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.UI;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -17,12 +17,14 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
+import io.github.gao23.myapplication.Logic.Entry;
+import io.github.gao23.myapplication.Logic.InvalidInputException;
+import io.github.gao23.myapplication.Logic.intentCode;
+import io.github.gao23.myapplication.R;
+
 
 public class NewTipActivity extends AppCompatActivity {
     private Button saveButton;
-
-
-
     private EditText entry;
     private EditText subEntry;
     private EditText customerPayment;
@@ -34,6 +36,10 @@ public class NewTipActivity extends AppCompatActivity {
     private CheckBox receiptBack;
     private boolean viewAddedFlag = false;
 
+    /***
+     * this is the old setup, it adds the background and everything
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +213,11 @@ public class NewTipActivity extends AppCompatActivity {
         }
     }
 
+    /***
+     * this checks if the decimal is the correct two places for denoting the currency, in USD
+     * @param test is the numerical value being tested
+     * @return the whether true or false if the decimal digits are correct
+     */
     private boolean decimalCheck(double test) {
         String num =  Double.toString(test);
         int i = num.lastIndexOf('.');
@@ -222,13 +233,20 @@ public class NewTipActivity extends AppCompatActivity {
 
 }
 
-
+    /***
+     * this is called whenever the user tapped on back pressed
+     * The result call passed back is invalid which will do nothing but showing a toast
+     */
     @Override
     public void onBackPressed() {
         this.setResult(intentCode.INVALID_RESULT_INTENT_CODE);
         finish();
     }
 
+    /***
+     * this returns the new user inputed entry back to the main activity to be added to the entry adaptor list
+     * @param result is the final new entry
+     */
     private void terminate(Entry result){
           Intent intent = new Intent();
           intent.putExtra(intentCode.ENTRY_PARCEL, result);
@@ -236,6 +254,9 @@ public class NewTipActivity extends AppCompatActivity {
           this.finish();
       }
 
+    /***
+     * this is called whenever texts changes in the textField
+     */
     private class TextChangedListenrer implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

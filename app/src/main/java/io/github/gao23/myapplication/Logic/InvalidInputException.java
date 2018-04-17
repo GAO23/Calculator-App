@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.Logic;
 
 /**
  * Created by GAO on 5/30/2017.

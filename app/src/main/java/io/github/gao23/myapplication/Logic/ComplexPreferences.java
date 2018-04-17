@@ -1,4 +1,4 @@
-package io.github.gao23.myapplication;
+package io.github.gao23.myapplication.Logic;
 
 /**
  * Majority of this code is not my own, I pulled it from http://blog.nkdroidsolutions.com/class-object-in-sharedpreferences/ and modified it to suit my needs.
@@ -13,7 +13,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 
