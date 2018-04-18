@@ -6,6 +6,5 @@
     <string name="github">https://github.com/GAO23/Delivery-Tip-Tracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="computer_tab">Computer Tab</string>
-    <string name="cash_tab">Cash Tab</string>
+    <string name="test">Hello World from section: %1$d</string>
 </resources>

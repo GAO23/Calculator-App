@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".UI.NewTipActivity"
-            android:theme="@style/tab_theme"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".UI.computerEditActivity" />
         <activity android:name=".UI.cashEditActivity" />
         <activity android:name=".UI.calculateActivity" />

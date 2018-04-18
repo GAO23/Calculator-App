@@ -1,40 +1,32 @@
 package io.github.gao23.myapplication.UI;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.content.Context;
+import android.support.v7.widget.ThemedSpinnerAdapter;
+import android.content.res.Resources.Theme;
 
+import android.widget.TextView;
 import io.github.gao23.myapplication.Logic.Entry;
-import io.github.gao23.myapplication.Logic.InvalidInputException;
 import io.github.gao23.myapplication.Logic.intentCode;
 import io.github.gao23.myapplication.R;
 
 
-public class NewTipActivity extends AppCompatActivity {
-    private Button saveButton;
-    private EditText entry;
-    private EditText subEntry;
-    private EditText customerPayment;
-    private CheckBox cashTip;
-    private RelativeLayout view;
-    private LayoutParams lp1;
-    private LayoutParams lp2;
-    private LayoutParams lp3;
-    private CheckBox receiptBack;
-    private boolean viewAddedFlag = false;
+public class NewTipActivity extends AppCompatActivity  {
+
+
 
     /***
      * this is the old setup, it adds the background and everything
@@ -43,196 +35,156 @@ public class NewTipActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.new_tip_layout);
-        saveButton = (Button) findViewById(R.id.Save);
-        this.saveButton.setEnabled(false);
-        view = (RelativeLayout) findViewById(R.id.RelativeLayout01);
-        entry = new EditText(this);
-        entry.setId(Integer.valueOf(1));
-        entry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-        subEntry = new EditText(this);
-        subEntry.setId(Integer.valueOf(2));
-        subEntry.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-        lp1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp1.addRule(RelativeLayout.BELOW, entry.getId());
-        lp2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp2.addRule(RelativeLayout.BELOW, subEntry.getId());
-        lp3 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        entry.addTextChangedListener(new TextChangedListenrer());
-        subEntry.addTextChangedListener(new TextChangedListenrer());
-        // tab activity looks nicer without action bar. you can create a no action bar style and set this activity to this theme style in manifest
-        //this.getSupportActionBar().setTitle("New Tip");
-    }
 
-    public void newUnpaidOrderClicked(View v) {
-        entry.setText("");
-        subEntry.setText("");
-        entry.setHint("Enter amount charged to customer");
-        subEntry.setHint("Enter your order number");
-        if (!viewAddedFlag) {
-            view.addView(entry);
-            view.addView(subEntry, lp1);
-            this.viewAddedFlag = true;
-        }
-        if (cashTip != null) {
-            view.removeView(cashTip);
-            cashTip = null;
-        }
-        if (customerPayment == null) {
-            customerPayment = new EditText(this);
-            customerPayment.setText("");
-            customerPayment.setHint("Enter customer payment amount");
-            customerPayment.setId(Integer.valueOf(3));
-            view.addView(customerPayment, lp2);
-            receiptBack = new CheckBox(this);
-            receiptBack.setText("Check this box if you did not bring back the receipt.");
-            lp3.addRule(RelativeLayout.BELOW, customerPayment.getId());
-            view.addView(receiptBack, lp3);
-            customerPayment.addTextChangedListener(new TextChangedListenrer());
-        }
-        if (customerPayment != null) {
-            customerPayment.setText("");
-            customerPayment.setHint("Enter customer payment amount");
-            receiptBack.setChecked(false);
-        }
-        Log.d("debug234",Boolean.toString(customerPayment==null));
-    }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        this.setUpSpinner(toolbar);
 
-    public void newPaidOrderClicked(View v) {
-        entry.setText("");
-        subEntry.setText("");
-        entry.setHint("Enter your tip amount");
-        subEntry.setHint("Enter your order address");
 
-        if (!viewAddedFlag) {
-            view.addView(entry);
-            view.addView(subEntry, lp1);
-            this.viewAddedFlag = true;
-        }
-        if (customerPayment != null) {
-            view.removeView(customerPayment);
-            customerPayment = null;
-            view.removeView(receiptBack);
-            receiptBack = null;
-        }
-        if (cashTip == null) {
-            cashTip = new CheckBox(this);
-            cashTip.setText("Check the box if this is cash tip");
-            view.addView(cashTip, lp2);
-        }
-        if (cashTip != null) {
-            cashTip.setChecked(false);
-        }
-    }
-
-    public void SaveClicked(View v) {
-        Entry result;
-        try {
-            if (cashTip==null) {
-                double chargedAmount;
-                int orderNum;
-                double payment;
-                try {
-                    chargedAmount = Double.parseDouble(entry.getText().toString());
-                    if (!decimalCheck(chargedAmount)) {
-                        throw new InvalidInputException(5);
-                    }
-                    if(chargedAmount<0){
-                        throw new InvalidInputException(8);
-                    }
-                } catch (NumberFormatException e) {
-                    throw new InvalidInputException(1);
-                }
-                try {
-                    orderNum = Integer.parseInt(subEntry.getText().toString());
-                    if(orderNum<0){
-                        throw new InvalidInputException(8);
-                    }
-                }
-                catch (NumberFormatException e) {
-                    throw new InvalidInputException(2);
-                }
-                try {
-                    payment = Double.parseDouble(customerPayment.getText().toString());
-                    if (!decimalCheck(payment)) {
-                        throw new InvalidInputException(6);
-                    }
-                    if(payment<0){
-                        throw new InvalidInputException(8);
-                    }
-                } catch (NumberFormatException e) {
-                    throw new InvalidInputException(3);
-                }
-                result = new Entry(chargedAmount, orderNum, payment, receiptBack.isChecked());
-                this.terminate(result);
-            } else {
-                double tipAmount;
-                String orderAddress = subEntry.getText().toString();
-                boolean isCashTip = cashTip.isChecked();
-                try {
-                    tipAmount = Double.parseDouble(entry.getText().toString());
-                    if (!decimalCheck(tipAmount)) {
-                        throw new InvalidInputException(7);
-                    }
-                    if(tipAmount<0){
-                        throw new InvalidInputException(8);
-                    }
-                } catch (NumberFormatException e) {
-                    throw new InvalidInputException(4);
-                }
-                result = new Entry(tipAmount, orderAddress, isCashTip);
-                this.terminate(result);
-            }
-        } catch (InvalidInputException e) {
-            int errorCode = e.getErrorCode();
-            switch (errorCode) {
-                case 1:
-                    Toast.makeText(this.getApplicationContext(), "Invalid charged amount", Toast.LENGTH_LONG).show();
-                    break;
-                case 2:
-                    Toast.makeText(this.getApplicationContext(), "Order number needs to be a whole number", Toast.LENGTH_LONG).show();
-                    break;
-                case 3:
-                    Toast.makeText(this.getApplicationContext(), "Invalid payment amount", Toast.LENGTH_LONG).show();
-                    break;
-                case 4:
-                    Toast.makeText(this.getApplicationContext(), "Invalid tip amount", Toast.LENGTH_LONG).show();
-                    break;
-                case 5:
-                    Toast.makeText(this.getApplicationContext(), "Make sure charged amount has two decimals only for cents", Toast.LENGTH_LONG).show();
-                    break;
-                case 6:
-                    Toast.makeText(this.getApplicationContext(), "Make sure payment amount has two decimals only for cents", Toast.LENGTH_LONG).show();
-                    break;
-                case 7:
-                    Toast.makeText(this.getApplicationContext(), "Make sure tip amount has two decimals only for cents", Toast.LENGTH_LONG).show();
-                    break;
-                case 8: Toast.makeText(this.getApplicationContext(), "One of the field is a negative value. Only positive is allowed.", Toast.LENGTH_LONG).show();
-                    break;
-            }
-        }
     }
 
     /***
-     * this checks if the decimal is the correct two places for denoting the currency, in USD
-     * @param test is the numerical value being tested
-     * @return the whether true or false if the decimal digits are correct
+     * I am not too sure about what these code exactly does, I will need to learn spinner a bit
+     * @param toolbar is the action bar that is created in the oncreate. It is a component of the new tip layout
      */
-    private boolean decimalCheck(double test) {
-        String num =  Double.toString(test);
-        int i = num.lastIndexOf('.');
-        if(test % 1 == 0){
+    private void setUpSpinner(Toolbar toolbar){
+        // Setup spinner
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setAdapter(new MyAdapter(
+                toolbar.getContext(),
+                new String[]{
+                        "Computer Tip",
+                        "Cash Tip"
+                }));
+
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // When the given dropdown item is selected, show its contents in the
+                // container view.
+                // container seems to be an empty view and the fragment manager seemed to replace everything inside the container with the fragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+
+    /* we don't need menu but lets keep it just in case
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.spinner_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
             return true;
-        }
-        else if(i != -1 && (num.substring(i + 1).length() == 2 || num.substring(i + 1).length() == 1)) {
-            return true;
-        }
-        else{
-            return false;
         }
 
-}
+        return super.onOptionsItemSelected(item);
+    } */
+
+
+    // this is similar to the entry adapter, all it does is add the item in a scroll like view to the spinner
+    private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
+        private final ThemedSpinnerAdapter.Helper mDropDownHelper;
+
+        public MyAdapter(Context context, String[] objects) {
+            super(context, android.R.layout.simple_list_item_1, objects);
+            mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            View view;
+
+            if (convertView == null) {
+                // Inflate the drop down using the helper's LayoutInflater
+                LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
+                view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            } else {
+                view = convertView;
+            }
+
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(getItem(position));
+
+            return view;
+        }
+
+        @Override
+        public Theme getDropDownViewTheme() {
+            return mDropDownHelper.getDropDownViewTheme();
+        }
+
+        @Override
+        public void setDropDownViewTheme(Theme theme) {
+            mDropDownHelper.setDropDownViewTheme(theme);
+        }
+    }
+
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public PlaceholderFragment() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.computer_fragment, container, false);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText(getString(R.string.test, getArguments().getInt(ARG_SECTION_NUMBER)));
+            return rootView;
+        }
+    }
+
+
 
     /***
      * this is called whenever the user tapped on back pressed
@@ -255,38 +207,6 @@ public class NewTipActivity extends AppCompatActivity {
           this.finish();
       }
 
-    /***
-     * this is called whenever texts changes in the textField
-     */
-    private class TextChangedListenrer implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                   return;
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            return;
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (customerPayment == null) {
-                if (entry.getText().length() == 0 || subEntry.getText().length() == 0) {
-                    saveButton.setEnabled(false);
-                } else {
-                    saveButton.setEnabled(true);
-                }
-            } else {
-                if (entry.getText().length() == 0 || subEntry.getText().length() == 0 || customerPayment.getText().length() == 0) {
-                    saveButton.setEnabled(false);
-                } else {
-                    saveButton.setEnabled(true);
-                }
-            }
-
-        }
-    }
 
  }
 
