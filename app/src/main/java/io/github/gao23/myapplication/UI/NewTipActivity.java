@@ -61,7 +61,8 @@ public class NewTipActivity extends AppCompatActivity {
         lp3 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         entry.addTextChangedListener(new TextChangedListenrer());
         subEntry.addTextChangedListener(new TextChangedListenrer());
-        this.getSupportActionBar().setTitle("New Tip");
+        // tab activity looks nicer without action bar. you can create a no action bar style and set this activity to this theme style in manifest
+        //this.getSupportActionBar().setTitle("New Tip");
     }
 
     public void newUnpaidOrderClicked(View v) {
