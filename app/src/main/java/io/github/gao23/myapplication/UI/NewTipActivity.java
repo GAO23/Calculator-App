@@ -3,10 +3,7 @@ package io.github.gao23.myapplication.UI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +14,11 @@ import android.widget.Spinner;
 import android.content.Context;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.content.res.Resources.Theme;
-
 import android.widget.TextView;
 import io.github.gao23.myapplication.Logic.Entry;
 import io.github.gao23.myapplication.Logic.intentCode;
 import io.github.gao23.myapplication.R;
+import io.github.gao23.myapplication.UI.Fragments.*;
 
 
 public class NewTipActivity extends AppCompatActivity  {
@@ -65,22 +62,22 @@ public class NewTipActivity extends AppCompatActivity  {
                 // When the given dropdown item is selected, show its contents in the
                 // container view.
                 // container seems to be an empty view and the fragment manager seemed to replace everything inside the container with the fragment
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                        .commit();
+                if (position == 0) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, computerFragments.newInstance(position))
+                            .commit();
+                }
+
+                else if(position == 1){
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, cashFragments.newInstance(position))
+                            .commit();
+                }
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
     }
@@ -110,7 +107,10 @@ public class NewTipActivity extends AppCompatActivity  {
     } */
 
 
-    // this is similar to the entry adapter, all it does is add the item in a scroll like view to the spinner
+    /***
+     * this is similar to the entry adapter, all it does is add the item in a scroll like view to the spinner
+     * we need to use it to show the title of the item on the spinner. The title of the spinner is set in the setup spinner method. Get item position returns the title
+     */
     private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
@@ -149,40 +149,7 @@ public class NewTipActivity extends AppCompatActivity  {
     }
 
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.computer_fragment, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.test, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
 
 
 

@@ -22,7 +22,7 @@ public class Entry implements Parcelable{
          this.entry = unpaidEntry;
          this.unpaidSubEntry = unpaidSubEntry;
          this.customerPayment = customerPayment;
-        this.receiptForgot = receiptForgot;
+         this.receiptForgot = receiptForgot;
     }
 
     public Entry(double paidEntry, String paiSubEntry, boolean cashTip){
