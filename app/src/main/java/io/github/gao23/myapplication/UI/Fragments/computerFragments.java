@@ -39,8 +39,6 @@ import io.github.gao23.myapplication.R;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.computer_fragment, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText("This is computer tip");
         return rootView;
     }
 }

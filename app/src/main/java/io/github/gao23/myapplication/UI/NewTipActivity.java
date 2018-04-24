@@ -1,5 +1,6 @@
 package io.github.gao23.myapplication.UI;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +23,8 @@ import io.github.gao23.myapplication.UI.Fragments.*;
 
 
 public class NewTipActivity extends AppCompatActivity  {
-
-
+    private cashFragments cashFrag;
+    private computerFragments computerFrag;
 
     /***
      * this is the old setup, it adds the background and everything
@@ -38,6 +39,9 @@ public class NewTipActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         this.setUpSpinner(toolbar);
+
+        computerFrag = computerFragments.newInstance(0);
+        cashFrag = cashFragments.newInstance(1);
 
 
     }
@@ -64,13 +68,13 @@ public class NewTipActivity extends AppCompatActivity  {
                 // container seems to be an empty view and the fragment manager seemed to replace everything inside the container with the fragment
                 if (position == 0) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, computerFragments.newInstance(position))
+                            .replace(R.id.container, computerFrag)
                             .commit();
                 }
 
                 else if(position == 1){
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, cashFragments.newInstance(position))
+                            .replace(R.id.container, cashFrag)
                             .commit();
                 }
             }

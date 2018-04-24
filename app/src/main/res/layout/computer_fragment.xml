@@ -1,21 +1,39 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/computerFragmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/section_label"
+
+    <EditText
+        android:id="@+id/tipAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="Enter tip amount"
+        android:inputType="number|numberSigned|numberDecimal" />
+
+    <EditText
+        android:id="@+id/computerTipIdentifier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tipAmount"
+        android:layout_alignRight="@+id/tipAmount"
+        android:layout_below="@+id/tipAmount"
+        android:ems="10"
+        android:hint="Enter order address or other identifier"
+        android:inputType="textPersonName" />
+
+    <CheckBox
+        android:id="@+id/cashTipCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/computerTipIdentifier"
+        android:text="Check this if this is cash tip" />
+</RelativeLayout>

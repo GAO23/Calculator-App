@@ -15,6 +15,7 @@ import io.github.gao23.myapplication.R;
 
 public class cashFragments extends Fragment{
 
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -39,9 +40,7 @@ public class cashFragments extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.computer_fragment, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText("This is cash tip");
+        View rootView = inflater.inflate(R.layout.cash_fragment, container, false);
         return rootView;
     }
 }
