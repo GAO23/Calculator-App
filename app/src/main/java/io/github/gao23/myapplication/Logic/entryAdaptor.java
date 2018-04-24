@@ -63,53 +63,41 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
 
     public void setPaidEntry(TextView view, Entry entry){
         double customerTip = entry.getEntry();
-        String address = entry.getPaidSubEntry();
+        String orderID = entry.getPaidSubEntry();
         String zero = "";
-        zero = this.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(customerTip)));
+        zero = Entry.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(customerTip)));
         if(entry.isCashTip()){
-            view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nAddress: " + address + "\nThis is cash tip!");
+            view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nOrder ID: " + orderID + "\nThis is cash tip!");
             view.setTextColor(Color.BLUE);
         }
         else{
-            view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nAddress: " + address);
+            view.setText("Computer Tip: $" +  new DecimalFormat("#.##").format(customerTip) + zero + "\nOrder ID: " + orderID);
             view.setTextColor(Color.BLACK);
         }
     }
 
     public void setUnpaidEntry(TextView view, Entry entry){
         double charge = entry.getEntry();
-        int orderNum = entry.getUnpaidSubEntry();
+        String orrderID = entry.getUnpaidSubEntry();
         double payment = entry.getCustomerPayment();
         DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";
-        zero = this.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(payment-charge)));
+        zero = Entry.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(payment-charge)));
         if(entry.isReceiptForgot()) {
-            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder Number: #" + orderNum + "\nYou forgot the receipt OMG!");
+            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder ID: #" + orrderID + "\nYou forgot the receipt OMG!");
             view.setTextColor(Color.RED);
         }
         else {
-            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder Number: #" + orderNum);
+            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder ID: #" + orrderID);
             view.setTextColor(Color.BLACK);
         }
         if(payment-charge < 0) {
             view.setText(view.getText() + "\nDid you undercharged the customer or something?? O.o");
             view.setTextColor(Color.parseColor("#800080"));
         }
-        }
-
-   public String checkIfZeroNeeded(double test){
-    String num =  Double.toString(test);
-    int i = num.lastIndexOf('.');
-        if(test % 1 == 0){
-            return ".00";
-        } if(i != -1 && num.substring(i + 1).length() == 1){
-        return "0";
-    }
-    else{
-        return "";
     }
 
-}
+
 
     @Override
     public int getItemViewType(int position) {

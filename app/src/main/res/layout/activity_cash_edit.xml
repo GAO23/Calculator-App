@@ -8,18 +8,19 @@
         android:id="@+id/cashEditText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:saveEnabled="true"/>
+        android:inputType="number|numberSigned|numberDecimal"
+        android:saveEnabled="true" />
 
     <EditText
         android:id="@+id/cashEditText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/cashEditText1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:saveEnabled="true"/>
+        android:layout_below="@+id/cashEditText1"
+        android:ems="10"
+        android:inputType="numberSigned|numberDecimal"
+        android:saveEnabled="true" />
 
     <EditText
         android:id="@+id/cashEditText3"

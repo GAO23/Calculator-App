@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
         if(totalComputerNum == 0){
             this.todayEntry.add(0,new Entry(""));
         }
-        todayEntry.add(1, entry);
+        todayEntry.add(totalComputerNum+1, entry);
     }
 
     /***
@@ -347,13 +347,8 @@ public class MainActivity extends AppCompatActivity {
         if (totalCashNum == 0) {
             this.todayEntry.add(new Entry(""));
         }
-            for (int i = totalComputerNum + 1; i < todayEntry.size(); i++) {
-                if (entry.getUnpaidSubEntry() < todayEntry.get(i).getUnpaidSubEntry()) {
-                    todayEntry.add(i, entry);
-                    break;
-                }
-            }
 
+        todayEntry.add(todayEntry.size(), entry);
 
         if (!this.todayEntry.contains(entry)) {
             this.todayEntry.add(entry);
@@ -366,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void updateComputerSummary(){
         String zero = "";
-        zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalComputerEarning)));
+        zero = Entry.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalComputerEarning)));
         String result = new DecimalFormat("#.##").format(totalComputerEarning) + zero;
         entryArrayAdapter.getItem(0).setSummaryMessage("Total Computer Orders: " + Integer.toString(totalComputerNum)  + "\nCash Tip: " + Integer.toString(cashTipNum) + "\nTotal Computer Earnings: $" + result);
     }
@@ -377,20 +372,20 @@ public class MainActivity extends AppCompatActivity {
     public void updateCashSummary(){
         if(totalComputerNum == 0){
             String zero = "";
-            zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
+            zero = Entry.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
             String result = new DecimalFormat("#.##").format(totalCashEarning) + zero;
             entryArrayAdapter.getItem(0).setSummaryMessage("Total Cash Orders: " + Integer.toString(totalCashNum) + "\nForgotten Receipt: " + Integer.toString(forgottenReceipt) +"\nTotal Cash Earnings: $" + result);
         }
         else{
             String zero = "";
-            zero = this.entryArrayAdapter.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
+            zero = Entry.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(totalCashEarning)));
             String result = new DecimalFormat("#.##").format(totalCashEarning) + zero;
             entryArrayAdapter.getItem(totalComputerNum+1).setSummaryMessage("Total Cash Orders: " + Integer.toString(totalCashNum) + "\nForgotten Receipt: " + Integer.toString(forgottenReceipt)  +"\nTotal Cash Earnings: $" + result);
         }
     }
 
     /***
-     * this is what happens when the entries in teh main activity is tapped on, it launches the proper activity to edit ttheentries
+     * this is what happens when the entries in teh main activity is tapped on, it launches the proper activity to edit the entries
      */
     private  class itemListener implements AdapterView.OnItemClickListener{
             @Override

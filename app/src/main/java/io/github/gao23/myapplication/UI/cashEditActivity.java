@@ -22,51 +22,51 @@ import io.github.gao23.myapplication.R;
 
 public class cashEditActivity extends AppCompatActivity {
     private EditText entry;
-    private EditText subEntry;
+    private EditText orderID;
     private EditText customerPayment;
     private CheckBox forgottenTip;
     private Entry initialEntry;
     private Button save;
 
+    /***
+     * setup, ui is defined in the layout
+     * @param savedInstanceState this is the default. intent contains the original entry
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_cash_edit);
         entry = (EditText) findViewById(R.id.cashEditText1);
-        subEntry = (EditText) findViewById(R.id.cashEditText2);
-        customerPayment = (EditText) findViewById(R.id.cashEditText3);
+        customerPayment = (EditText) findViewById(R.id.cashEditText2);
+        orderID = (EditText) findViewById(R.id.cashEditText3);
         forgottenTip = (CheckBox) findViewById(R.id.cashCheckBox);
         forgottenTip.setText("Check this box if you did not bring back the receipt.");
         initialEntry = this.getIntent().getParcelableExtra(intentCode.ENTRY_PARCEL);
         save = (Button) findViewById(R.id.cashSaveButton);
         this.initialSetUp();
-        entry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
-        subEntry.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
-        customerPayment.addTextChangedListener(new editTextChangeListener(save,entry,subEntry,customerPayment));
+        entry.addTextChangedListener(new editTextChangeListener(save,entry,orderID,customerPayment));
+        orderID.addTextChangedListener(new editTextChangeListener(save,entry,orderID,customerPayment));
+        customerPayment.addTextChangedListener(new editTextChangeListener(save,entry,orderID,customerPayment));
         this.getSupportActionBar().setTitle("Edit Cash Tip");
     }
 
+    /***
+     * do nothing but go back to the main activity when back pressed
+     */
     @Override
     public void onBackPressed() {
         this.setResult(intentCode.INVALID_RESULT_INTENT_CODE);
         finish();
     }
 
-    public String checkIfZeroNeeded(double test){
-        String num =  Double.toString(test);
-        int i = num.lastIndexOf('.');
-        if(test % 1 == 0){
-            return ".00";
-        } if(i != -1 && num.substring(i + 1).length() == 1){
-            return "0";
-        }
-        else{
-            return "";
-        }
 
-    }
 
+    /***
+     * this finally terminates the activity on successful modification saved
+     * it returns the modified entry
+     * @param result is the modified entry
+     */
     public void saveTermination(Entry result){
         Intent intent = new Intent();
         intent.putExtra(intentCode.EDITED_ENTRY_PARCEL, result);
@@ -86,6 +86,11 @@ public class cashEditActivity extends AppCompatActivity {
         this.finish();
     }
 
+    /***
+     * this is a helper function that checks if the entry had been modifed
+     * @param result is the final result entry used to compare with the original for changes
+     * @return the boolean isModified
+     */
     public boolean modified (Entry result){
         boolean isModified = false;
         if (result.getEntry() != initialEntry.getEntry()){
@@ -105,34 +110,28 @@ public class cashEditActivity extends AppCompatActivity {
     }
 
 
-    private boolean decimalCheck(double test) {
-        String num =  Double.toString(test);
-        int i = num.lastIndexOf('.');
-        if(test % 1 == 0){
-            return true;
-        }
-        else if(i != -1 && (num.substring(i + 1).length() == 2 || num.substring(i + 1).length() == 1)) {
-            return true;
-        }
-        else{
-            return false;
-        }
 
-    }
 
+    /***
+     * initial helper setup function in the constructor
+     * it makes sure the entry is being display correctly like the proper decimals and values
+     */
     private void initialSetUp(){
         DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";
-        zero = checkIfZeroNeeded(initialEntry.getEntry());
+        zero = Entry.checkIfZeroNeeded(initialEntry.getEntry());
         entry.setText(new DecimalFormat("#.##").format(initialEntry.getEntry()) + zero);
-        subEntry.setText(Integer.toString(initialEntry.getUnpaidSubEntry()));
-        zero = checkIfZeroNeeded(initialEntry.getCustomerPayment());
+        orderID.setText(initialEntry.getUnpaidSubEntry());
+        zero = Entry.checkIfZeroNeeded(initialEntry.getCustomerPayment());
         customerPayment.setText(new DecimalFormat("#.##").format(initialEntry.getCustomerPayment()) + zero);
         forgottenTip.setChecked(initialEntry.isReceiptForgot());
     }
 
 
-
+    /***
+     * this asks the user to confirm the changes
+     * @param result
+     */
     private void Confirmation(final Entry result) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -154,6 +153,9 @@ public class cashEditActivity extends AppCompatActivity {
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
+    /***
+     * this is called when user confirmed to delete the entry
+     */
     public void deleteTermination(){
         Intent intent = new Intent();
         int position = this.getIntent().getIntExtra("position",0);
@@ -162,6 +164,9 @@ public class cashEditActivity extends AppCompatActivity {
         finish();
     }
 
+    /***
+     *  this shows a confirmation dialog ig user wishes to delete the entry
+     */
     private void deleteConfirmed() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -184,6 +189,10 @@ public class cashEditActivity extends AppCompatActivity {
     }
 
 
+    /***
+     * this shows a pop up informing the user he has changed nothing thus changing nothing
+     * it will return the activity to the main activity afterwards
+     */
     public void unmodifiedSaved() {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Alert");
@@ -198,14 +207,19 @@ public class cashEditActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /***
+     * this is called when the user clicks on the saved button
+     * it will saved the changes
+     * @param view is the saved button
+     */
     public void cashSave(View view) {
         double chargedAmount;
-        int orderNum;
+        String orderID = this.orderID.getText().toString();
         double payment;
         try {
             try {
                 chargedAmount = Double.parseDouble(entry.getText().toString());
-                if (!decimalCheck(chargedAmount)) {
+                if (!Entry.decimalCheck(chargedAmount)) {
                     throw new InvalidInputException(5);
                 }
                 if (chargedAmount < 0) {
@@ -214,17 +228,10 @@ public class cashEditActivity extends AppCompatActivity {
             } catch (NumberFormatException e) {
                 throw new InvalidInputException(1);
             }
-            try {
-                orderNum = Integer.parseInt(subEntry.getText().toString());
-                if (orderNum < 0) {
-                    throw new InvalidInputException(8);
-                }
-            } catch (NumberFormatException e) {
-                throw new InvalidInputException(2);
-            }
+
             try {
                 payment = Double.parseDouble(customerPayment.getText().toString());
-                if (!decimalCheck(payment)) {
+                if (!Entry.decimalCheck(payment)) {
                     throw new InvalidInputException(6);
                 }
                 if (payment < 0) {
@@ -233,7 +240,7 @@ public class cashEditActivity extends AppCompatActivity {
             } catch (NumberFormatException e) {
                 throw new InvalidInputException(3);
             }
-            Entry result = new Entry(chargedAmount, orderNum, payment, forgottenTip.isChecked());
+            Entry result = new Entry(chargedAmount, orderID, payment, forgottenTip.isChecked());
             if (this.modified(result)) {
                 this.Confirmation(result);
             } else {

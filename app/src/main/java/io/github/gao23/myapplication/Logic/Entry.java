@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Entry implements Parcelable{
     private double entry;
-    private int unpaidSubEntry;
+    private String cashOrderID;
     private double customerPayment;
     private String paidSubEntry;
     private boolean cashTip = false;
@@ -18,9 +18,9 @@ public class Entry implements Parcelable{
     private boolean summaryFlag = false;
     private String summaryMessage;
 
-    public Entry (double unpaidEntry, int unpaidSubEntry, double customerPayment, boolean receiptForgot){
+    public Entry (double unpaidEntry, String cashOrderID, double customerPayment, boolean receiptForgot){
          this.entry = unpaidEntry;
-         this.unpaidSubEntry = unpaidSubEntry;
+         this.cashOrderID = cashOrderID;
          this.customerPayment = customerPayment;
          this.receiptForgot = receiptForgot;
     }
@@ -41,8 +41,8 @@ public class Entry implements Parcelable{
        return entry;
     }
 
-    public int getUnpaidSubEntry() {
-       return unpaidSubEntry;
+    public String getUnpaidSubEntry() {
+       return cashOrderID;
     }
 
     public String getPaidSubEntry(){
@@ -79,7 +79,7 @@ public class Entry implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(this.entry);
-        dest.writeInt(this.unpaidSubEntry);
+        dest.writeString(this.cashOrderID);
         dest.writeDouble(this.customerPayment);
         dest.writeDouble(this.entry);
         dest.writeString(this.paidSubEntry);
@@ -92,7 +92,7 @@ public class Entry implements Parcelable{
 
     protected Entry(Parcel in) {
         this.entry = in.readDouble();
-        this.unpaidSubEntry = in.readInt();
+        this.cashOrderID = in.readString();
         this.customerPayment = in.readDouble();
         this.entry = in.readDouble();
         this.paidSubEntry = in.readString();
@@ -114,7 +114,52 @@ public class Entry implements Parcelable{
             return new Entry[size];
         }
     };
+
     public void setSummaryMessage(String message){
         this.summaryMessage = message;
     }
+
+
+    /***
+     * helper function to add the zeros if the decials places are less than two
+     * @param test is the number being tested
+     * @return the number of zeros needed to append to a decimal
+     */
+    public static String checkIfZeroNeeded(double test){
+        String num =  Double.toString(test);
+        int i = num.lastIndexOf('.');
+        if(test % 1 == 0){
+            return ".00";
+        } if(i != -1 && num.substring(i + 1).length() == 1){
+            return "0";
+        }
+        else{
+            return "";
+        }
+
+    }
+
+    /***
+     * this checks if the value has the right decimal, use as helper function to make sure the number user entered has decimal and two digits after it
+     * @param test is the value being checked
+     * @return
+     */
+    public static boolean decimalCheck(double test) {
+        String num =  Double.toString(test);
+        int i = num.lastIndexOf('.');
+        if(test % 1 == 0){
+            return true;
+        }
+        else if(i != -1 && (num.substring(i + 1).length() == 2 || num.substring(i + 1).length() == 1)) {
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+
 }
+
+

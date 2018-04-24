@@ -16,6 +16,8 @@ import android.content.Context;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.content.res.Resources.Theme;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import io.github.gao23.myapplication.Logic.Entry;
 import io.github.gao23.myapplication.Logic.intentCode;
 import io.github.gao23.myapplication.R;
@@ -25,6 +27,7 @@ import io.github.gao23.myapplication.UI.Fragments.*;
 public class NewTipActivity extends AppCompatActivity  {
     private cashFragments cashFrag;
     private computerFragments computerFrag;
+    private boolean isComputer = true;
 
     /***
      * this is the old setup, it adds the background and everything
@@ -67,12 +70,14 @@ public class NewTipActivity extends AppCompatActivity  {
                 // container view.
                 // container seems to be an empty view and the fragment manager seemed to replace everything inside the container with the fragment
                 if (position == 0) {
+                    isComputer = true;
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container, computerFrag)
                             .commit();
                 }
 
                 else if(position == 1){
+                    isComputer = false;
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container, cashFrag)
                             .commit();
@@ -177,6 +182,27 @@ public class NewTipActivity extends AppCompatActivity  {
           this.setResult(intentCode.VALID_RESULT_INTENT_CODE, intent);
           this.finish();
       }
+
+    /***
+     * this saves the entry
+     * @param view is the botton being clicked
+     */
+    public void savedClicked(View view){
+            if(isComputer && computerFrag.isValid()){
+                Entry entry = new Entry(computerFrag.getTipAmount(), computerFrag.getOrderID(), computerFrag.isCashTip());
+                this.terminate(entry);
+                return;
+            }
+
+            if(!isComputer && cashFrag.isValid()){
+                Entry entry = new Entry(cashFrag.getAmountCharged(), cashFrag.getOrderID(), cashFrag.getPaymentAmount(), cashFrag.isRecieptForgotten());
+                this.terminate(entry);
+                return;
+            }
+        Toast.makeText(this.getApplicationContext(), "One of the field is empty or invalid. Check if USD has more than two decimal places", Toast.LENGTH_LONG).show();
+        return;
+      }
+
 
 
  }

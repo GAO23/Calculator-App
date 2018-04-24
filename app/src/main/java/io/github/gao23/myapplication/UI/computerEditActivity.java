@@ -47,26 +47,14 @@ public class computerEditActivity extends AppCompatActivity {
     private void initialSetUp(){
        DecimalFormat df = new DecimalFormat("#.##");
         String zero = "";
-        zero = checkIfZeroNeeded(initialEntry.getEntry());
+        zero = Entry.checkIfZeroNeeded(initialEntry.getEntry());
         entry.setText(new DecimalFormat("#.##").format(initialEntry.getEntry()) + zero);
         subEntry.setText(initialEntry.getPaidSubEntry());
         cashTip.setText("Check the box if this is cash tip");
         cashTip.setChecked(initialEntry.isCashTip());
     }
 
-    public String checkIfZeroNeeded(double test){
-        String num =  Double.toString(test);
-        int i = num.lastIndexOf('.');
-        if(test % 1 == 0){
-            return ".00";
-        } if(i != -1 && num.substring(i + 1).length() == 1){
-            return "0";
-        }
-        else{
-            return "";
-        }
 
-    }
 
     @Override
     public void onBackPressed() {
@@ -81,7 +69,7 @@ public class computerEditActivity extends AppCompatActivity {
             boolean isCashTip = cashTip.isChecked();
             try {
                 tipAmount = Double.parseDouble(entry.getText().toString());
-                if (!decimalCheck(tipAmount)) {
+                if (!Entry.decimalCheck(tipAmount)) {
                     throw new InvalidInputException(7);
                 }
                 if(tipAmount<0){
@@ -150,20 +138,6 @@ public class computerEditActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private boolean decimalCheck(double test) {
-        String num =  Double.toString(test);
-        int i = num.lastIndexOf('.');
-        if(test % 1 == 0){
-            return true;
-        }
-        else if(i != -1 && (num.substring(i + 1).length() == 2 || num.substring(i + 1).length() == 1)) {
-            return true;
-        }
-        else{
-            return false;
-        }
-
-    }
     private void Confirmation(final Entry result) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
