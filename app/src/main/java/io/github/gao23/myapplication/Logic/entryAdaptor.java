@@ -24,6 +24,14 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
         mInflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    /**
+     * this method sets up the adaptor and adds the entry
+     * must use a holder and a holder tag in embedded class to display the recycle convert view properly when scrolling
+     * @param position position of the item in the list
+     * @param convertView this is used to specify the layout of the item in the list
+     * @param parent this is unimportant, just pass it when inflating convert view
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Entry entry = getItem(position);
@@ -84,11 +92,11 @@ public class entryAdaptor extends ArrayAdapter<Entry> {
         String zero = "";
         zero = Entry.checkIfZeroNeeded(Double.parseDouble(new DecimalFormat("#.##").format(payment-charge)));
         if(entry.isReceiptForgot()) {
-            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder ID: #" + orrderID + "\nYou forgot the receipt OMG!");
+            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder ID: " + orrderID + "\nYou forgot the receipt OMG!");
             view.setTextColor(Color.RED);
         }
         else {
-            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder ID: #" + orrderID);
+            view.setText("Cash Tip: $" + new DecimalFormat("#.##").format(payment - charge) + zero + "\nOrder ID: " + orrderID);
             view.setTextColor(Color.BLACK);
         }
         if(payment-charge < 0) {

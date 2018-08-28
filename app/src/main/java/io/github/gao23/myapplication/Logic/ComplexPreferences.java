@@ -15,7 +15,10 @@ import java.lang.reflect.Type;
 
 import java.util.List;
 
-
+/**
+ *  This is the library for saving to jason
+ *  modified the token to match the store object
+ */
 public class ComplexPreferences {
 
     private static ComplexPreferences complexPreferences;
