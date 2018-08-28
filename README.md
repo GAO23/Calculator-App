@@ -8,7 +8,11 @@ This app is made for fast food delivery driver to help them track of their deliv
 App is live on playstore 
 https://play.google.com/store/apps/details?id=io.github.gao23.myapplication
 
+<<<<<<< HEAD
 there are users, I will contiune to maintain the app. :) 
+=======
+As long as there are users, I will contiune to maintain the app. :) 
+>>>>>>> bf54d116d5104133d47dbf097ae85d7171b1b08c
 
 
 
