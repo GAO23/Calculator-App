@@ -10,7 +10,6 @@ https://play.google.com/store/apps/details?id=io.github.gao23.myapplication
 
 
 As long as there are users, I will contiune to maintain the app. :) 
->>>>>>> bf54d116d5104133d47dbf097ae85d7171b1b08c
 
 
 
